@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:guardian_project/service/sound_meter_service.dart';
+// ignore: depend_on_referenced_packages
 import 'package:collection/collection.dart';
 
 /// ## Noise level detector service

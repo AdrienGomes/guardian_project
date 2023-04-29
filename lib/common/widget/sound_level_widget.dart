@@ -3,8 +3,6 @@ import 'package:guardian_project/service/sound_meter_service.dart';
 
 /// sound level viewer as a [StreamBuilder]
 class StreamSoundLevelViewer extends StatelessWidget {
-  static const Duration _animationDuration = Duration(milliseconds: 500);
-
   final Stream<NoiseReading> noiseStream;
   final Stream<bool> noiseLevelDetectorStream;
   final int maxVolume;

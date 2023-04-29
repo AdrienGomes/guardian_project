@@ -156,7 +156,7 @@ class NoiseMeter {
     try {
       _streamer.start(_onAudio, _onInternalError);
     } catch (error) {
-      print(error);
+      //print(error);
     }
   }
 
