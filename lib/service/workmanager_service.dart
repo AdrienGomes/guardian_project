@@ -45,7 +45,7 @@ class BackgroundTaskService {
           // ### TODO : create voice recognition service
           while (true) {
             if (inputData?[listeningConditionTag] == "true") {
-              print(inputData?[actionTag]);
+              //print(inputData?[actionTag]);
             }
           }
         });
