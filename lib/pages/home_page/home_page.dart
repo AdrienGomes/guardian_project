@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:guardian_project/common/base_page.dart';
-import 'package:guardian_project/common/widget/bouncing_button.dart';
+import 'package:guardian_project/common/widget/ripple_button.dart';
 import 'package:guardian_project/pages/home_page/home_page_controller.dart';
 import 'package:guardian_project/theme/theme.dart';
 
@@ -10,31 +10,25 @@ class HomePage extends BasePage<HomePageController> {
   @override
   Widget getContent(BuildContext context) => AnimatedContainer(
         duration: GuardianThemeColor.animatedContainerAnimationDuration,
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: pageController.isSoundServiceOn()
-              ? [
-                  GuardianThemeColor.buttonSatetOnGradient.colors.first.withOpacity(0.45),
-                  GuardianThemeColor.buttonSatetOnGradient.colors.last.withOpacity(0.0),
-                ]
-              : [
-                  GuardianThemeColor.buttonSatetOffGradient.colors.first.withOpacity(0.45),
-                  GuardianThemeColor.buttonSatetOffGradient.colors.last.withOpacity(0.0),
-                ],
-        )),
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/angel_wings.png"),
+            opacity: 0.4,
+            fit: BoxFit.contain,
+          ),
+        ),
         child: Padding(
           padding: const EdgeInsets.all(50),
           child: SizedBox(
             width: 200,
             height: 200,
             child: BouncingStateButton(
-              isCircularButton: true,
               buttonSize: const Size(250, 250),
               onPressed: () => pageController.switchOnOffSoundMeterService(),
               getState: pageController.isSoundServiceOn,
               stateOnbuttonGradiantColor: GuardianThemeColor.buttonSatetOnGradient,
+              stateOnButtonLabel: "Activated",
+              stateOffButtonLabel: "Deactivated",
               stateOffbuttonGradiantColor: GuardianThemeColor.buttonSatetOffGradient,
               stateOnIcon: Icon(
                 Icons.safety_check_outlined,
