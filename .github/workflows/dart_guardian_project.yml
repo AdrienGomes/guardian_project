@@ -1,9 +1,9 @@
 name: dart guardian project
 
 on:
-  push:
-    branches:
-      - master
+  pull_request:
+    types:
+      - opened
 
 jobs:
   build_android:
