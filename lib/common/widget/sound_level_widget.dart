@@ -2,10 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:guardian_project/service/sound_meter_service.dart';
 
 /// sound level viewer as a [StreamBuilder]
+///
+/// This widget displays the level of the sound measured by the microphone and collecting through the [noiseStream].
+///
+/// It also displays the noise level dector level, a value either true or false that indicates whether or not a significant noise volume change appeared (see [SoundLevelDetectorService])
 class StreamSoundLevelViewer extends StatelessWidget {
+  /// Stream that returns the sound level volume
   final Stream<NoiseReading> noiseStream;
+
+  /// Stream that returns the noise evel detector value
   final Stream<bool> noiseLevelDetectorStream;
+
+  /// The maximum volume allowed (every measured will recompute to be relative to that maximum value)
   final int maxVolume;
+
+  /// Get the mean value of the [SoundLevelDetectorService]
   final double Function() getLevelDetectorMeanValue;
 
   StreamSoundLevelViewer(
@@ -49,7 +60,7 @@ class StreamSoundLevelViewer extends StatelessWidget {
         return StreamBuilder(
             stream: noiseLevelDetectorStream,
             builder: ((context, detectionSnapshot) => CustomPaint(
-                  foregroundPainter: LevelIndicatorPainter(getLevelDetectorMeanValue(),
+                  foregroundPainter: LevelIndicatorPainter(_computeRelativeVolume(getLevelDetectorMeanValue()),
                       Theme.of(context).colorScheme.primary, maxVolume.toDouble(), detectionSnapshot.data ?? false),
                   child: Container(
                     decoration: BoxDecoration(

@@ -19,7 +19,7 @@ class ServiceLocator {
 
   void _initServices() {
     // register sound meter service
-    final soundMeterServiceInstance = SoundMeterService.init();
+    final soundMeterServiceInstance = NoiseMeterService.init();
     serviceLocator.registerSingleton(soundMeterServiceInstance);
 
     // register toast service

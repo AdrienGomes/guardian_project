@@ -13,26 +13,34 @@ import 'package:collection/collection.dart';
 /// ```serviceLocator<NoiseLevelDetector>().watcher```, witch returns a stream of boolean
 class NoiseLevelDetectorService {
   // constants for gliding windows
-  static const _glidingWindowSize = 70;
-  static const _glidingPeakEventSize = 4;
+  static const _glidingWindowSize = 100;
+  static const _glidingPeakEventSize = 6;
 
   /// dB treshold
-  static const _treshold = 10;
+  static const _treshold = 9;
+
   bool _tresholdReached = false;
   int _countReachedTreshold = 0;
 
+  /// [Stream] that returns a boolean whether or not the level has significantly changed
   late final Stream<bool> watcher;
-  final GlidingList<double> glidingRecordWindow = GlidingList(_glidingWindowSize);
 
-  final SoundMeterService _soundMeterService;
+  /// The mean value of this [NoiseLevelDetectorService]
+  double get meanValue => _glidingRecordWindow.getMean();
+
+  late final _GlidingList<double, bool> _glidingRecordWindow;
+
+  final NoiseMeterService _soundMeterService;
   StreamSubscription<NoiseReading>? _soundMeterServiceSubscription;
 
   NoiseLevelDetectorService.init(this._soundMeterService) {
+    // subscribe to sound meter service
     _soundMeterServiceSubscription ??= _soundMeterService.subscribeTo(StreamController()
       ..stream.listen((event) {
-        glidingRecordWindow.append(event.maxDecibel);
+        _glidingRecordWindow.append(event.maxDecibel);
       }));
 
+    // build the watch stream
     _watch();
   }
 
@@ -46,10 +54,11 @@ class NoiseLevelDetectorService {
 
   /// process when a new record is added to the window (when window is full)
   bool _newRecordInWindow(double record) {
+    var treshold = _computeTreshold();
     // increment/decrement peak event buffer
-    if ((record - glidingRecordWindow.getMean()) >= _treshold && _countReachedTreshold < _glidingPeakEventSize) {
+    if ((record - _glidingRecordWindow.getMean()) >= treshold && _countReachedTreshold < _glidingPeakEventSize) {
       _countReachedTreshold++;
-    } else if ((record - glidingRecordWindow.getMean()) < _treshold && _countReachedTreshold > 0) {
+    } else if ((record - _glidingRecordWindow.getMean()) < treshold && _countReachedTreshold > 0) {
       _countReachedTreshold--;
     }
 
@@ -63,48 +72,60 @@ class NoiseLevelDetectorService {
     return _tresholdReached;
   }
 
-  /// create a stream that returs [_tresholdReached] for each new value added in the gliding window
+  /// create a stream [watcher] that returns [_tresholdReached] for each new value added in the gliding window
   void _watch() {
     final watcherController = StreamController<bool>.broadcast();
-    final sub = StreamController<double>();
-    glidingRecordWindow.addSubscriber(sub);
-    sub.stream.listen((event) => watcherController.sink.add(_newRecordInWindow(event)));
+    _glidingRecordWindow = _GlidingList<double, bool>(
+        size: _glidingWindowSize,
+        subscriber: _GlidingListSubscriber<double, bool>(subscriber: watcherController, onAdd: _newRecordInWindow));
     watcher = watcherController.stream;
   }
+
+  /// compute the treshold value based on the average noise value
+  double _computeTreshold() => _treshold - _glidingRecordWindow.getMean() / 10;
 }
 
-/// Sized list where adding values removes the olest ones
-class GlidingList<T extends num> {
-  final List<T> _innerList = [];
-  final List<StreamController<T>> _subscribers = [];
+/// Sized list where adding values removes the oldest ones
+///
+/// Holds a subscriber [_GlidingListSubscriber] that reacts whenever a value is added once the list is full
+class _GlidingList<TList extends num, TSub> {
+  final List<TList> _innerList = [];
+  final _GlidingListSubscriber<TList, TSub> subscriber;
 
   final int size;
   final int meanBufferSize;
 
-  GlidingList(this.size) : meanBufferSize = size ~/ 4;
+  _GlidingList({required this.size, required this.subscriber}) : meanBufferSize = size ~/ 4;
 
   /// append an element at the end of the list, removing the first one if [size] is exceeded
-  void append(T newValue) {
+  /// also add
+  void append(TList newValue) {
     if (_innerList.length == size) {
       _innerList.removeAt(0);
     }
 
     _innerList.add(newValue);
 
-    if (_isFullLength()) {
-      // send data to subscribers
-      for (var sub in _subscribers) {
-        sub.sink.add(newValue);
-      }
+    // send data to the subscriber
+    if (_isMeaningful()) {
+      subscriber.add(newValue);
     }
   }
 
-  /// get the mean value of the [GlidingList]
+  /// get the mean value of the [_GlidingList]
   double getMean() => _innerList.average;
 
-  /// register a new subscriber to this list
-  void addSubscriber(StreamController<T> streamController) => _subscribers.add(streamController);
-
   /// tells if the list is full
-  bool _isFullLength() => _innerList.length == size;
+  bool _isMeaningful() => _innerList.length >= size / 2;
+}
+
+/// This discribes a [_GlidingList] subscriber
+class _GlidingListSubscriber<Tin, Tout> {
+  StreamController<Tout> subscriber;
+  Tout Function(Tin value) onAdd;
+
+  _GlidingListSubscriber({required this.subscriber, required this.onAdd});
+
+  /// Add a new value to the subscriber
+  void add(Tin event) => subscriber.sink.add(onAdd(event));
 }

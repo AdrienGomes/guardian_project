@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:guardian_project/common/base_page.dart';
 import 'package:guardian_project/common/widget/ripple_button.dart';
+import 'package:guardian_project/intl.dart';
 import 'package:guardian_project/pages/home_page/home_page_controller.dart';
-import 'package:guardian_project/theme/theme.dart';
+import 'package:guardian_project/theme/guardian_theme_color.dart';
 
 class HomePage extends BasePage<HomePageController> {
   HomePage({super.key}) : super(HomePageController());
 
+  static const _animatedContainerAnimationDuration = Duration(milliseconds: 300);
+
   @override
   Widget getContent(BuildContext context) => AnimatedContainer(
-        duration: GuardianThemeColor.animatedContainerAnimationDuration,
+        duration: _animatedContainerAnimationDuration,
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/images/angel_wings.png"),
@@ -27,36 +30,19 @@ class HomePage extends BasePage<HomePageController> {
               onPressed: () => pageController.switchOnOffSoundMeterService(),
               getState: pageController.isSoundServiceOn,
               stateOnbuttonGradiantColor: GuardianThemeColor.buttonSatetOnGradient,
-              stateOnButtonLabel: "Activated",
-              stateOffButtonLabel: "Deactivated",
+              stateOnButtonLabel: tr.home_page_button_state_on_label,
+              stateOffButtonLabel: tr.home_page_button_state_off_label,
               stateOffbuttonGradiantColor: GuardianThemeColor.buttonSatetOffGradient,
-              stateOnIcon: Icon(
+              stateOnIcon: const Icon(
                 Icons.safety_check_outlined,
-                color: Colors.green,
                 size: 50,
-                shadows: [
-                  Shadow(
-                    color: Colors.green.withOpacity(0.6),
-                    blurRadius: 20,
-                  )
-                ],
               ),
-              stateOffIcon: Icon(
+              stateOffIcon: const Icon(
                 Icons.close,
-                color: Colors.red,
                 size: 50,
-                shadows: [
-                  Shadow(
-                    color: Colors.red.withOpacity(0.6),
-                    blurRadius: 20,
-                  )
-                ],
               ),
             ),
           ),
         ),
       );
-
-  @override
-  Future<bool> onWillPop() => Future.value(!pageController.stateData.isBusy);
 }

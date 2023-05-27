@@ -3,15 +3,15 @@ import 'package:guardian_project/service/sound_meter_service.dart';
 import 'package:guardian_project/service_locator.dart';
 
 /// [HomePage] controller
-class HomePageController extends BasePageController<_StateHomePageController> {
+class HomePageController extends BaseViewPageController<_StateHomePageController> {
   HomePageController() : super(_StateHomePageController());
 
   /// toast service
-  late final SoundMeterService _soundMeterService;
+  late final NoiseMeterService _soundMeterService;
 
   @override
   void initAsync() {
-    _soundMeterService = serviceLocator<SoundMeterService>();
+    _soundMeterService = serviceLocator<NoiseMeterService>();
   }
 
   /// activate or deactivate sound meter service
@@ -26,8 +26,16 @@ class HomePageController extends BasePageController<_StateHomePageController> {
   //   await FlutterPhoneDirectCaller.callNumber(number);
   // }
 
-  /// get the [SoundMeterService] state
+  /// get the [NoiseMeterService] state
   bool isSoundServiceOn() => _soundMeterService.isRecording;
+
+  @override
+  void onHide() {}
+
+  @override
+  void onShow() {
+    notifyListeners();
+  }
 }
 
 class _StateHomePageController extends BasePageControllerState {}

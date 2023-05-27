@@ -1,6 +1,11 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:guardian_project/common/base_page.dart';
+import 'package:guardian_project/generated/l10n.dart';
+import 'package:guardian_project/intl.dart';
 import 'package:guardian_project/pages/home_page/home_page.dart';
 import 'package:guardian_project/pages/sound_configuration/sound_configuration_page.dart';
 import 'package:guardian_project/service_locator.dart';
@@ -35,8 +40,24 @@ class GuardianApp extends StatelessWidget {
       title: 'Guardian App',
       theme: GuardianTheme().theme,
       darkTheme: GuardianTheme(darkMode: true).theme,
-      home: const NavigatorHomeScreen(),
+      home: const NavigationBottomBar(),
       debugShowCheckedModeBanner: false,
+      localizationsDelegates: const [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: S.delegate.supportedLocales,
+      localeResolutionCallback: (locale, supportedLocales) {
+        for (var supportedLocale in supportedLocales) {
+          if (supportedLocale.languageCode == locale?.languageCode &&
+              supportedLocale.countryCode == locale?.countryCode) {
+            return supportedLocale;
+          }
+        }
+        return supportedLocales.first;
+      },
       navigatorKey: navigatorKey,
       builder: FToastBuilder(),
     );
@@ -44,14 +65,14 @@ class GuardianApp extends StatelessWidget {
 }
 
 /// navigator class to build the navigation menu
-class NavigatorHomeScreen extends StatefulWidget {
-  const NavigatorHomeScreen({super.key});
+class NavigationBottomBar extends StatefulWidget {
+  const NavigationBottomBar({super.key});
 
   @override
-  State<NavigatorHomeScreen> createState() => _StateNavigatorHomeScreen();
+  State<NavigationBottomBar> createState() => _StateNavigationBottomBar();
 }
 
-class _StateNavigatorHomeScreen extends State<NavigatorHomeScreen> with SingleTickerProviderStateMixin {
+class _StateNavigationBottomBar extends State<NavigationBottomBar> with SingleTickerProviderStateMixin {
   int _pageIndex = 0;
   late final List<NavigationEntry> _navigationEntries;
   late PageController _pageController;
@@ -68,45 +89,49 @@ class _StateNavigatorHomeScreen extends State<NavigatorHomeScreen> with SingleTi
   @override
   Widget build(BuildContext context) => Scaffold(
         body: PageView(
-          controller: _pageController,
-          children: _navigationEntries.map((e) => e.destinationBuilder()).toList(),
-          onPageChanged: (pageIndex) => setState(() => _pageIndex = pageIndex),
-        ),
+            controller: _pageController,
+            onPageChanged: _onPageChanged,
+            children: _navigationEntries.map((e) => e.destinationBuilder).toList()),
         bottomNavigationBar: _getNavigationBar(),
       );
 
   /// Get the [NavigationBar]
   Widget _getNavigationBar() => BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
         items: _navigationEntries.map((e) => e.navigationBarItem).toList(),
         currentIndex: _pageIndex,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
         onTap: _navigate,
       );
 
   /// navigate to the selected page
   void _navigate(int pageIndex) => setState(() {
-        _pageIndex = pageIndex;
-        _pageController.animateToPage(_pageIndex, duration: animationDuration, curve: Curves.fastOutSlowIn);
+        _pageController.animateToPage(pageIndex, duration: animationDuration, curve: Curves.fastOutSlowIn);
       });
+
+  /// callback called when the page is changed
+  void _onPageChanged(int pageIndex) {
+    _navigationEntries[_pageIndex].destinationBuilder.onHide();
+    _navigationEntries[pageIndex].destinationBuilder.onShow();
+    setState(() => _pageIndex = pageIndex);
+  }
 
   /// get all the [NavigationEntry] for the application
   List<NavigationEntry> _getNavigationEntries() => [
-        _buildNavigationEntry(destinationBuilder: HomePage(), title: "Home Page", icon: Icons.safety_check),
+        _buildNavigationEntry(destinationPage: HomePage(), title: tr.app_bar_title_home_page, icon: Icons.safety_check),
         _buildNavigationEntry(
-            destinationBuilder: SoundConfigurationPage(), title: "Sound Configuration", icon: Icons.equalizer)
+            destinationPage: SoundConfigurationPage(),
+            title: tr.app_bar_title_sound_configuration_page,
+            icon: Icons.equalizer)
       ];
 
   /// builds a single navigation bar entry ([NavigationEntry])
   NavigationEntry _buildNavigationEntry(
-          {required BasePage destinationBuilder,
+          {required BasePage destinationPage,
           required String title,
           required IconData icon,
           Color? iconColor,
           Color? backgroundColor}) =>
       NavigationEntry(
-          destinationBuilder: () => destinationBuilder,
+          destinationBuilder: destinationPage,
           navigationBarItem: BottomNavigationBarItem(
               label: title, icon: Icon(icon, color: iconColor), backgroundColor: backgroundColor),
           title: title);
@@ -116,7 +141,7 @@ class _StateNavigatorHomeScreen extends State<NavigatorHomeScreen> with SingleTi
 ///
 /// To use with [NavigationBar]
 class NavigationEntry {
-  final BasePage Function() destinationBuilder;
+  final BasePage destinationBuilder;
   final BottomNavigationBarItem navigationBarItem;
   final String title;
 

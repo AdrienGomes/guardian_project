@@ -39,7 +39,7 @@ class _BouncingStateButtonState extends State<BouncingStateButton> with SingleTi
 
   late bool _isButtonPressed;
 
-  BouncingButtonThemeExtension? theme;
+  StateButtonThemeExtension? theme;
 
   @override
   void initState() {
@@ -65,7 +65,9 @@ class _BouncingStateButtonState extends State<BouncingStateButton> with SingleTi
 
   @override
   Widget build(BuildContext context) {
-    theme ??= Theme.of(context).extension<BouncingButtonThemeExtension>();
+    theme ??= Theme.of(context).extension<StateButtonThemeExtension>();
+
+    _isButtonPressed = widget.getState();
 
     return Center(
       child: GestureDetector(
@@ -77,6 +79,8 @@ class _BouncingStateButtonState extends State<BouncingStateButton> with SingleTi
           gradient: (_isButtonPressed ? widget.stateOnbuttonGradiantColor : widget.stateOffbuttonGradiantColor) ??
               theme?.colorGradient,
           stateOnIcon: widget.stateOnIcon,
+          stateOnIconColor: theme?.stateOnColor,
+          stateOffIconColor: theme?.stateOffColor,
           stateOffIcon: widget.stateOffIcon,
           buttonSize: widget.buttonSize,
         ),
@@ -98,9 +102,13 @@ class _BouncingStateButtonState extends State<BouncingStateButton> with SingleTi
 /// Scale animated button widget
 class AnimatedButton extends AnimatedWidget {
   static const defaultSize = Size(200, 70);
+  static const _bouncingAnimationDuration = Duration(milliseconds: 300);
 
   final Icon stateOnIcon;
   final Icon stateOffIcon;
+
+  final Color? stateOnIconColor;
+  final Color? stateOffIconColor;
 
   final String? label;
   final Gradient? gradient;
@@ -109,33 +117,39 @@ class AnimatedButton extends AnimatedWidget {
   final bool isButtonPressed;
 
   final AnimationController _controller;
-  const AnimatedButton(
-    AnimationController controller, {
-    super.key,
-    this.isButtonPressed = false,
-    this.stateOnIcon = const Icon(Icons.check),
-    this.label,
-    this.buttonSize,
-    this.gradient,
-    this.stateOffIcon = const Icon(Icons.close),
-  })  : _controller = controller,
+  const AnimatedButton(AnimationController controller,
+      {super.key,
+      this.isButtonPressed = false,
+      this.stateOnIcon = const Icon(Icons.check),
+      this.stateOnIconColor,
+      this.label,
+      this.buttonSize,
+      this.gradient,
+      this.stateOffIcon = const Icon(Icons.close),
+      this.stateOffIconColor})
+      : _controller = controller,
         super(listenable: controller);
 
   @override
   Widget build(BuildContext context) => RipplesAnimation(
-        animationOff: !isButtonPressed,
+        animationIsOff: !isButtonPressed,
         size: buttonSize?.width ?? defaultSize.width,
-        colorGradient: RadialGradient(colors: gradient?.colors ?? [Colors.grey]),
+        colorGradient: RadialGradient(colors: gradient?.colors ?? [Theme.of(context).colorScheme.primary]),
         child: Transform.scale(
           scale: 1 - _controller.value,
           child: AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
+            duration: _bouncingAnimationDuration,
             height: buttonSize?.height ?? defaultSize.height,
             width: buttonSize?.width ?? defaultSize.width,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular((buttonSize?.width ?? defaultSize.width) / 2),
                 border: Border.all(color: gradient?.colors.first ?? Theme.of(context).colorScheme.primary, width: 8),
-                boxShadow: [BoxShadow(color: gradient?.colors.first ?? Colors.grey, spreadRadius: 4, blurRadius: 3)],
+                boxShadow: [
+                  BoxShadow(
+                      color: gradient?.colors.first ?? Theme.of(context).colorScheme.primary,
+                      spreadRadius: 4,
+                      blurRadius: 3)
+                ],
                 gradient: gradient),
             child: Center(
               child: Column(
@@ -151,7 +165,7 @@ class AnimatedButton extends AnimatedWidget {
                         )),
                   Padding(
                     padding: const EdgeInsets.all(10),
-                    child: isButtonPressed ? stateOnIcon : stateOffIcon,
+                    child: isButtonPressed ? _buildStateOnIcon() : _buildStateOffIcon(),
                   )
                 ],
               ),
@@ -159,13 +173,49 @@ class AnimatedButton extends AnimatedWidget {
           ),
         ),
       );
+
+  Icon _buildStateOnIcon() {
+    if (stateOnIcon.color == null && stateOnIconColor != null) {
+      return Icon(
+        stateOnIcon.icon,
+        size: stateOnIcon.size,
+        color: stateOnIconColor,
+        shadows: [
+          Shadow(
+            color: stateOnIconColor!.withOpacity(0.5),
+            blurRadius: 20,
+          )
+        ],
+      );
+    }
+
+    return stateOnIcon;
+  }
+
+  Icon _buildStateOffIcon() {
+    if (stateOffIcon.color == null && stateOffIconColor != null) {
+      return Icon(
+        stateOffIcon.icon,
+        size: stateOffIcon.size,
+        color: stateOffIconColor,
+        shadows: [
+          Shadow(
+            color: stateOffIconColor!.withOpacity(0.5),
+            blurRadius: 20,
+          )
+        ],
+      );
+    }
+
+    return stateOffIcon;
+  }
 }
 
 /// Creates a circle ripple animation around a widget
 class RipplesAnimation extends StatefulWidget {
   final double size;
   final RadialGradient colorGradient;
-  final bool animationOff;
+  final bool animationIsOff;
   final Widget child;
 
   const RipplesAnimation({
@@ -173,7 +223,7 @@ class RipplesAnimation extends StatefulWidget {
     required this.size,
     required this.colorGradient,
     required this.child,
-    required this.animationOff,
+    required this.animationIsOff,
   }) : super(key: key);
 
   @override
@@ -183,11 +233,14 @@ class RipplesAnimation extends StatefulWidget {
 class _RipplesAnimationState extends State<RipplesAnimation> with TickerProviderStateMixin {
   late final AnimationController _controller;
 
+  /// ripples animation duration
+  static const _ripplesAnimationDuration = Duration(milliseconds: 1000);
+
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 1000),
+      duration: _ripplesAnimationDuration,
       vsync: this,
     )..repeat();
   }
@@ -222,7 +275,7 @@ class _RipplesAnimationState extends State<RipplesAnimation> with TickerProvider
 
   @override
   Widget build(BuildContext context) => Center(
-        child: widget.animationOff
+        child: widget.animationIsOff
             ? _staticButton()
             : CustomPaint(
                 painter: CirclePainter(

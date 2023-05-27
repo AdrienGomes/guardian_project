@@ -7,10 +7,10 @@ import 'package:guardian_project/service/sound_meter_service.dart';
 import 'package:guardian_project/service_locator.dart';
 
 /// Controller for the [SoundConfigurationPage] page
-class SoundConfigurationController extends BasePageController<_StateConfigurationController> {
+class SoundConfigurationController extends BaseViewPageController<_StateConfigurationController> {
   static const maxEqualizerSoundVolume = 120;
 
-  final SoundMeterService _soundMeterService = serviceLocator<SoundMeterService>();
+  final NoiseMeterService _soundMeterService = serviceLocator<NoiseMeterService>();
   final NoiseLevelDetectorService _noiseLevelDetectorService = serviceLocator<NoiseLevelDetectorService>();
 
   /// ctor
@@ -18,16 +18,13 @@ class SoundConfigurationController extends BasePageController<_StateConfiguratio
 
   @override
   void initAsync() {
-    stateData._currentSubscription ??= _soundMeterService.subscribeTo(stateData._noiseReadingStreamController);
-    _soundMeterService.pauseSubscription(stateData._currentSubscription.hashCode);
+    stateData._currentNoiseReadingSubscription ??=
+        _soundMeterService.subscribeTo(stateData._noiseReadingStreamController);
+    _soundMeterService.pauseSubscription(stateData._currentNoiseReadingSubscription.hashCode);
     _noiseLevelDetectorService.pause();
+
+    stateData._noiseLevelDetectorStream = _noiseLevelDetectorService.watcher;
   }
-
-  /// get a [Stream] to detect noise changes
-  Stream<NoiseReading> getNoiseReadingStream() => stateData._noiseReadingStreamController.stream;
-
-  /// get a [Stream] to detect noise detector level changes
-  Stream<bool> getNoiseLevelDetectorStream() => _noiseLevelDetectorService.watcher;
 
   /// activate or deactivate sound meter service
   void switchOnOffSubscription() {
@@ -35,26 +32,41 @@ class SoundConfigurationController extends BasePageController<_StateConfiguratio
     notifyListeners();
   }
 
-  /// if subscription is active
-  bool isSubscriptionActive() => stateData._currentSubscription?.isPaused == true;
+  /// if noise reading subscription is active
+  bool isSubscriptionActive() => stateData._currentNoiseReadingSubscription?.isPaused == true;
 
-  double getDetectionLevel() =>
-      (_noiseLevelDetectorService.glidingRecordWindow.getMean() * 100) / maxEqualizerSoundVolume;
+  /// get the noise detector mean value
+  double getDetectionLevel() => _noiseLevelDetectorService.meanValue;
 
   /// turns on and off all the associated services
-  void _switchServices(bool onOff) {
-    if (onOff) {
-      _soundMeterService.pauseSubscription(stateData._currentSubscription.hashCode);
+  void _switchServices(bool turnOff) {
+    if (turnOff) {
+      _soundMeterService.pauseSubscription(stateData._currentNoiseReadingSubscription.hashCode);
       _noiseLevelDetectorService.pause();
     } else {
-      _soundMeterService.resumeSubscription(stateData._currentSubscription.hashCode);
+      _soundMeterService.resumeSubscription(stateData._currentNoiseReadingSubscription.hashCode);
       _noiseLevelDetectorService.resume();
     }
   }
+
+  @override
+  void onHide() => _switchServices(true);
+
+  @override
+  void onShow() {}
 }
 
 class _StateConfigurationController extends BasePageControllerState {
+  /// [StreamController] used to subscribe to [NoiseMeterService]
   final StreamController<NoiseReading> _noiseReadingStreamController = StreamController<NoiseReading>.broadcast();
 
-  StreamSubscription<NoiseReading>? _currentSubscription;
+  /// current [StreamSubscription] from subscribing [_noiseReadingStreamController] to the [NoiseMeterService]
+  StreamSubscription<NoiseReading>? _currentNoiseReadingSubscription;
+
+  /// Noise reaing [Stream] to listen to the [NoiseMeterService]
+  Stream<NoiseReading> get noiseReadingStream => _noiseReadingStreamController.stream;
+
+  /// [NoiseLevelDetectorService] watcher ([NoiseLevelDetectorService.watcher])
+  Stream<bool> get noiseLevelDetectorStream => _noiseLevelDetectorStream;
+  late final Stream<bool> _noiseLevelDetectorStream;
 }

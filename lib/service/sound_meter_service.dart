@@ -5,7 +5,7 @@ import 'package:audio_streamer/audio_streamer.dart';
 import 'package:flutter/services.dart';
 
 /// Sound meter service to get info on sound/noise level from microphone
-class SoundMeterService {
+class NoiseMeterService {
   bool get isRecording => _subscriptions.values.any((sub) => !sub.isPaused);
 
   /// Map of subscriptions to this service
@@ -14,7 +14,7 @@ class SoundMeterService {
   late final NoiseMeter _noiseMeter;
 
   /// base ctor
-  SoundMeterService.init() {
+  NoiseMeterService.init() {
     _noiseMeter = NoiseMeter(_onError);
   }
 

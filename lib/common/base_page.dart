@@ -1,29 +1,28 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
+import 'package:guardian_project/common/base_async_state.dart';
 import 'package:provider/provider.dart';
 
 // -------------------------------------------------------------
-// Method described here : Build a page
+// Method described here : Build a page to be used with [Navigator.push] method
 // - Use a [BasePage] to design UI
 // - Use a [BasePageController] with a [BasePageControllerState] to design any computation logic
 //
 // This allow to separate the logic from the view. The controller will notify the Page
 // -------------------------------------------------------------
+abstract class BasePopingPage<T extends BasePopingPageController> extends StatelessWidget {
+  /// page controller as [BasePageController]
+  final T pageController;
 
-/// Base class to create a page
-abstract class BasePage<T extends BasePageController> extends StatelessWidget {
-  const BasePage(this.pageController, {super.key});
-
-  /// As page always use [WillPopScope], the onWillPop callback is required to build a page
+  /// As [BasePopingPage] always use [WillPopScope], the onWillPop callback is required to build
   ///
   /// It's a callback that will be called whenever the back process is called
-  Future<bool> onWillPop();
+  Future<bool> onWillPop() => pageController.onWillPop();
 
   /// Build the inner content of the page
   Widget getContent(BuildContext context);
 
-  /// page controller as [BasePageController]
-  final T pageController;
+  const BasePopingPage({super.key, required this.pageController});
 
   @override
   Widget build(BuildContext context) => WillPopScope(
@@ -32,7 +31,60 @@ abstract class BasePage<T extends BasePageController> extends StatelessWidget {
           value: pageController, child: Consumer<T>(builder: (context, controller, _) => getContent(context))));
 }
 
+// -------------------------------------------------------------
+// Method described here : Build a page to be used within [PageView]
+// - Use a [BasePage] to design UI
+// - Use a [BasePageController] with a [BasePageControllerState] to design any computation logic
+//
+// This allow to separate the logic from the view. The controller will notify the Page
+// -------------------------------------------------------------
+
+/// Base class to create a page
+abstract class BasePage<T extends BaseViewPageController> extends StatelessWidget {
+  const BasePage(this.pageController, {super.key});
+
+  /// It's a callback that will be called whenever the page is hidden
+  void onHide() => pageController.onHide();
+
+  /// It's a callback that will be called whenever the page is shown
+  void onShow() => pageController.onShow();
+
+  /// Build the inner content of the page
+  Widget getContent(BuildContext context);
+
+  // /// method that will be called
+  // void onHide();
+
+  /// page controller as [BasePageController]
+  final T pageController;
+
+  @override
+  Widget build(BuildContext context) => ChangeNotifierProvider<T>.value(
+      value: pageController, child: Consumer<T>(builder: (context, controller, _) => getContent(context)));
+}
+
 /// Controller to hold [BasePage] logic
+abstract class BaseViewPageController<T extends BasePageControllerState> extends BasePageController<T> {
+  BaseViewPageController(super.stateData);
+
+  /// callback when the page is hidden
+  void onHide();
+
+  /// callback when the page is shown
+  void onShow();
+}
+
+/// Controller to hold [BasePopingPage] logic
+abstract class BasePopingPageController<T extends BasePageControllerState> extends BasePageController<T> {
+  BasePopingPageController(super.stateData);
+
+  /// As page always use [WillPopScope], the onWillPop callback is required to build a page
+  ///
+  /// It's a callback that will be called whenever the back process is called
+  Future<bool> onWillPop();
+}
+
+/// Controller to hold page logic
 abstract class BasePageController<T extends BasePageControllerState> extends ChangeNotifier {
   /// the controller's state
   T get stateData => _stateData;
@@ -76,27 +128,3 @@ abstract class BasePageController<T extends BasePageControllerState> extends Cha
 
 /// Base state to use with [BasePage]
 abstract class BasePageControllerState extends BaseAsyncState {}
-
-/// Base class to create an asynchronous state
-abstract class BaseAsyncState {
-  /// this controller has error
-  bool get hasError => _error != null;
-  Object? _error;
-
-  /// this controller is busy
-  bool get isBusy => _runningProcesses.isNotEmpty;
-  final Map<int, Future> _runningProcesses = {};
-
-  /// set an error
-  void setError(Object error) => _error = error;
-
-  /// reset an error
-  void resetError() => _error = null;
-
-  /// add a process to the associated controller handling processes
-  void addRunningProcess(Future future) => _runningProcesses[future.hashCode] =
-      future.whenComplete(() => _runningProcesses.removeWhere((key, value) => key == future.hashCode));
-
-  /// get the error formatted as string
-  String getFormattedError() => _error.toString();
-}

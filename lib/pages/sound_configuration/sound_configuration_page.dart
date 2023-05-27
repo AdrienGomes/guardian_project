@@ -21,8 +21,8 @@ class SoundConfigurationPage extends BasePage<SoundConfigurationController> {
               Expanded(
                 child: StreamSoundLevelViewer(
                   getLevelDetectorMeanValue: () => pageController.getDetectionLevel(),
-                  noiseLevelDetectorStream: pageController.getNoiseLevelDetectorStream(),
-                  noiseStream: pageController.getNoiseReadingStream(),
+                  noiseLevelDetectorStream: pageController.stateData.noiseLevelDetectorStream,
+                  noiseStream: pageController.stateData.noiseReadingStream,
                   maxVolume: SoundConfigurationController.maxEqualizerSoundVolume,
                 ),
               ),
@@ -36,7 +36,4 @@ class SoundConfigurationPage extends BasePage<SoundConfigurationController> {
           ),
         ),
       );
-
-  @override
-  Future<bool> onWillPop() => Future.value(!pageController.stateData.isBusy);
 }
