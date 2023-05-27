@@ -36,9 +36,13 @@ jobs:
     - uses: actions/setup-java@v1
       with:
         java-version: '12.x'
+    - uses: dart-lang/setup-dart@v1
+      with:
+            sdk: "stable"
     - uses: subosito/flutter-action@v1
       with:
-          channel: 'dev'
+            flutter-version: "3.x"
+            channel: 'stable'
     - run: flutter pub get
     - run: flutter clean
     - run: flutter build ios --release --no-codesign
