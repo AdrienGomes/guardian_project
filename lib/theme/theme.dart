@@ -12,8 +12,6 @@ class GuardianTheme {
         ThemeData(
             colorScheme: _toColorScheme(darkMode),
             bottomNavigationBarTheme: _toNavigationBarTheme(),
-            backgroundColor:
-                darkMode ? GuardianThemeColor.darkBackgroundColor : GuardianThemeColor.lightBackgroundColor,
             scaffoldBackgroundColor:
                 darkMode ? GuardianThemeColor.darkBackgroundColor : GuardianThemeColor.lightBackgroundColor),
         darkMode);
