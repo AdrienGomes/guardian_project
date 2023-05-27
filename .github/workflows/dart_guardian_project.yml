@@ -14,8 +14,12 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: '12.x'
+      - uses: dart-lang/setup-dart@v1
+        with:
+            sdk: "stable"
       - uses: subosito/flutter-action@v1
         with:
+            flutter-version: "stable
             channel: 'dev'
       - run: flutter pub get
       - run: flutter analyze .
