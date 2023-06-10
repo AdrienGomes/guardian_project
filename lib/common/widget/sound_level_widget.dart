@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:guardian_project/intl.dart';
 import 'package:guardian_project/service/sound_meter_service.dart';
 
 /// sound level viewer as a [StreamBuilder]
 ///
 /// This widget displays the level of the sound measured by the microphone and collecting through the [noiseStream].
 ///
-/// It also displays the noise level dector level, a value either true or false that indicates whether or not a significant noise volume change appeared (see [SoundLevelDetectorService])
+/// It also displays the noise level dector level, and display wether or not the detector has triggered (see [SoundLevelDetectorService])
 class StreamSoundLevelViewer extends StatelessWidget {
   /// Stream that returns the sound level volume
   final Stream<NoiseReading> noiseStream;
 
-  /// Stream that returns the noise evel detector value
+  /// Stream that returns the noise level detector value
   final Stream<bool> noiseLevelDetectorStream;
 
   /// The maximum volume allowed (every measured will recompute to be relative to that maximum value)
@@ -19,7 +20,7 @@ class StreamSoundLevelViewer extends StatelessWidget {
   /// Get the mean value of the [SoundLevelDetectorService]
   final double Function() getLevelDetectorMeanValue;
 
-  StreamSoundLevelViewer(
+  const StreamSoundLevelViewer(
       {super.key,
       required this.noiseStream,
       this.maxVolume = 100,
@@ -117,31 +118,17 @@ class StreamSoundLevelViewer extends StatelessWidget {
                 )));
       });
 
-  /// list of colors for the sound level viewer
-  final List<Color> colorGradiantList = [
-    Colors.green.shade900,
-    Colors.green.shade400,
-    Colors.green.shade200,
-    Colors.yellow.shade200,
-    Colors.yellow.shade600,
-    Colors.orange.shade400,
-    Colors.orange.shade800,
-    Colors.red.shade400,
-    Colors.red.shade900,
-    Colors.redAccent.shade700,
-  ];
+  /// compute volume accordingly to max decibel
+  double _computeRelativeVolume(double value) => ((value.isInfinite || value.isNaN) ? 0 : value * 100) / maxVolume;
 
-  /// compute colume according to max decibel
-  double _computeRelativeVolume(double value) => (value * 100) / maxVolume;
-
-  /// compute an index between 1 and 10 to select a color among the [colorGradiantList]
+  /// compute an index to select a color among the [colorGradiantList]
   int _computeListIndexFromDbValue(double dBValue) {
     final relativeValue = _computeRelativeVolume(dBValue);
-    return relativeValue > 1 ? ((relativeValue / 10) - 1).floor() : 0;
+    return relativeValue > 1 ? (((relativeValue * colorGradiantList.length) / 100) - 1).floor() : 0;
   }
 }
 
-/// show a level with a vertically moving bar
+/// show a level with a horizontal bar
 class LevelIndicatorPainter extends CustomPainter {
   static const Color goldColor = Color.fromARGB(255, 212, 158, 40);
 
@@ -167,9 +154,9 @@ class LevelIndicatorPainter extends CustomPainter {
           text: "${height.ceilToDouble()} dB",
           children: [
             if (isDetecting)
-              const TextSpan(
-                  text: " - gap detected",
-                  style: TextStyle(color: goldColor, fontStyle: FontStyle.italic, fontSize: 10))
+              TextSpan(
+                  text: tr.level_indicator_gap_detected_label,
+                  style: const TextStyle(color: goldColor, fontStyle: FontStyle.italic, fontSize: 10))
           ],
           style: TextStyle(
               color: isDetecting ? goldColor : lineColor,
@@ -196,3 +183,27 @@ class LevelIndicatorPainter extends CustomPainter {
   /// turn the pixel height into the db relative height
   double _getRelativeHeight(double height, Size canvasSize) => (height * canvasSize.height) / maximumHeight;
 }
+
+/// list of colors for the sound level viewer
+final List<Color> colorGradiantList = [
+  Colors.green.shade900,
+  Colors.green.shade700,
+  Colors.green.shade500,
+  Colors.green.shade300,
+  Colors.green.shade100,
+  Colors.yellow,
+  Colors.yellow.shade200,
+  Colors.yellow.shade400,
+  Colors.yellow.shade600,
+  Colors.yellow.shade800,
+  Colors.orange.shade200,
+  Colors.orange.shade400,
+  Colors.orange.shade600,
+  Colors.orange.shade800,
+  Colors.red.shade200,
+  Colors.red.shade400,
+  Colors.red.shade600,
+  Colors.red.shade800,
+  Colors.redAccent.shade400,
+  Colors.redAccent.shade700,
+];

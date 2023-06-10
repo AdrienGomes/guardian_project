@@ -5,6 +5,11 @@ import 'package:guardian_project/intl.dart';
 import 'package:guardian_project/pages/home_page/home_page_controller.dart';
 import 'package:guardian_project/theme/guardian_theme_color.dart';
 
+/// ## Page : Home Page
+///
+/// This page shows a button that enable the guardian background service
+///
+/// *See [BasePage]*
 class HomePage extends BasePage<HomePageController> {
   HomePage({super.key}) : super(HomePageController());
 
@@ -13,6 +18,7 @@ class HomePage extends BasePage<HomePageController> {
   @override
   Widget getContent(BuildContext context) => AnimatedContainer(
         duration: _animatedContainerAnimationDuration,
+        //  TODO: to remove : (A test to diaply images)
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/images/angel_wings.png"),
@@ -27,7 +33,7 @@ class HomePage extends BasePage<HomePageController> {
             height: 200,
             child: BouncingStateButton(
               buttonSize: const Size(250, 250),
-              onPressed: () => pageController.switchOnOffSoundMeterService(),
+              onPressed: pageController.switchOnOffSoundMeterService,
               getState: pageController.isSoundServiceOn,
               stateOnbuttonGradiantColor: GuardianThemeColor.buttonSatetOnGradient,
               stateOnButtonLabel: tr.home_page_button_state_on_label,

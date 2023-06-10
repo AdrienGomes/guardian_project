@@ -1,44 +1,63 @@
 import 'dart:async';
 
 import 'package:guardian_project/common/base_page.dart';
+import 'package:guardian_project/intl.dart';
 import 'package:guardian_project/pages/sound_configuration/sound_configuration_page.dart';
-import 'package:guardian_project/service/noise_detector_service.dart';
+import 'package:guardian_project/service/sound_detector_service.dart';
 import 'package:guardian_project/service/sound_meter_service.dart';
+import 'package:guardian_project/service/toast_service.dart';
+import 'package:guardian_project/service/voice_recognition_service.dart';
 import 'package:guardian_project/service_locator.dart';
 
 /// Controller for the [SoundConfigurationPage] page
 class SoundConfigurationController extends BaseViewPageController<_StateConfigurationController> {
+  /// Maximum volume that could be displayed
   static const maxEqualizerSoundVolume = 120;
 
-  final NoiseMeterService _soundMeterService = serviceLocator<NoiseMeterService>();
-  final NoiseLevelDetectorService _noiseLevelDetectorService = serviceLocator<NoiseLevelDetectorService>();
+  final SoundMeterService _soundMeterService = serviceLocator<SoundMeterService>();
+  final SoundLevelDetectorService _noiseLevelDetectorService = serviceLocator<SoundLevelDetectorService>();
+  final VoiceRecognitionService _voiceRecognitionService = serviceLocator<VoiceRecognitionService>();
+  final ToastService _toastService = serviceLocator<ToastService>();
 
   /// ctor
   SoundConfigurationController() : super(_StateConfigurationController());
 
   @override
   void initAsync() {
+    // init [SoundMeterService] subscription
     stateData._currentNoiseReadingSubscription ??=
         _soundMeterService.subscribeTo(stateData._noiseReadingStreamController);
+
+    // pause both [SoundMeterService] and [SoundLevelDetectorService]
     _soundMeterService.pauseSubscription(stateData._currentNoiseReadingSubscription.hashCode);
     _noiseLevelDetectorService.pause();
 
-    stateData._noiseLevelDetectorStream = _noiseLevelDetectorService.watcher;
+    // bind the [VoiceRecognitionService] on the output of the [SoundLevelDetectorService]
+    final noiseLevelStreamController = StreamController<bool>.broadcast()
+      ..addStream(_noiseLevelDetectorService.watcher);
+    noiseLevelStreamController.stream.listen((event) {
+      if (event) _voiceRecognitionService.addListeningSession(_buildListeningSession());
+    });
+
+    stateData._noiseLevelDetectorStreamController = noiseLevelStreamController;
   }
 
-  /// activate or deactivate sound meter service
+  /// Activate or deactivate any [SoundMeterService] subscriptions
   void switchOnOffSubscription() {
     _switchServices(!isSubscriptionActive());
     notifyListeners();
   }
 
-  /// if noise reading subscription is active
+  /// Tells if the NoiseReading subscription is active
   bool isSubscriptionActive() => stateData._currentNoiseReadingSubscription?.isPaused == true;
 
-  /// get the noise detector mean value
-  double getDetectionLevel() => _noiseLevelDetectorService.meanValue;
+  /// Get the noise detector mean value
+  double getDetectionLevel() =>
+      (_noiseLevelDetectorService.meanValue.isNaN || _noiseLevelDetectorService.meanValue.isInfinite)
+          ? 0
+          : _noiseLevelDetectorService.meanValue;
 
-  /// turns on and off all the associated services
+  /// Turns on and off all the services homed by this controller
   void _switchServices(bool turnOff) {
     if (turnOff) {
       _soundMeterService.pauseSubscription(stateData._currentNoiseReadingSubscription.hashCode);
@@ -49,6 +68,18 @@ class SoundConfigurationController extends BaseViewPageController<_StateConfigur
     }
   }
 
+  /// Build a listening sessions
+  ListeningSession _buildListeningSession() => ListeningSession(
+      hotSentence: stateData._hotSentence,
+      onRecognizedSentence: () {
+        _toastService.showToast(tr.sound_configuration_hot_sentence_recognized_toast_label(stateData._hotSentence));
+        // turn off services when hot sentence recognized
+        _switchServices(true);
+      });
+
+  /// update hotSentence
+  void updateHotSentence(String newSentence) => stateData._hotSentence = newSentence;
+
   @override
   void onHide() => _switchServices(true);
 
@@ -57,16 +88,20 @@ class SoundConfigurationController extends BaseViewPageController<_StateConfigur
 }
 
 class _StateConfigurationController extends BasePageControllerState {
-  /// [StreamController] used to subscribe to [NoiseMeterService]
+  /// [StreamController] used to subscribe to [SoundMeterService]
   final StreamController<NoiseReading> _noiseReadingStreamController = StreamController<NoiseReading>.broadcast();
 
-  /// current [StreamSubscription] from subscribing [_noiseReadingStreamController] to the [NoiseMeterService]
-  StreamSubscription<NoiseReading>? _currentNoiseReadingSubscription;
-
-  /// Noise reaing [Stream] to listen to the [NoiseMeterService]
+  /// Noise reaing [Stream] to listen to the [SoundMeterService]
   Stream<NoiseReading> get noiseReadingStream => _noiseReadingStreamController.stream;
 
-  /// [NoiseLevelDetectorService] watcher ([NoiseLevelDetectorService.watcher])
-  Stream<bool> get noiseLevelDetectorStream => _noiseLevelDetectorStream;
-  late final Stream<bool> _noiseLevelDetectorStream;
+  /// current [StreamSubscription] from subscribing [_noiseReadingStreamController] to the [SoundMeterService]
+  StreamSubscription<NoiseReading>? _currentNoiseReadingSubscription;
+
+  /// [SoundLevelDetectorService] watcher ([SoundLevelDetectorService.watcher])
+  Stream<bool> get noiseLevelDetectorStream => _noiseLevelDetectorStreamController.stream;
+  late final StreamController<bool> _noiseLevelDetectorStreamController;
+
+  /// the sentence to be recognized during listening session
+  String get hotSentence => _hotSentence;
+  String _hotSentence = tr.sound_controller_page_default_hot_sentence;
 }

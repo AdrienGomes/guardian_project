@@ -2,5 +2,15 @@
     "app_bar_title_home_page": "Acceuil",
     "app_bar_title_sound_configuration_page": "Conf. Son",
     "home_page_button_state_on_label": "Activé",
-    "home_page_button_state_off_label": "Désactivé"
+    "home_page_button_state_off_label": "Désactivé",
+    "sound_controller_page_default_hot_sentence": "Bonjour",
+    "sound_configuration_hot_sentence_recognized_toast_label" : "Phrase clée : {hotSentence} a été reconnue",
+    "@sound_configuration_hot_sentence_recognized_toast_label": {
+      "placeholders": {
+        "hotSentence": {
+          "type": "String"
+        }
+      }
+    },
+    "level_indicator_gap_detected_label": "Différence détectée"
 }

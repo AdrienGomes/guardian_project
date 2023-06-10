@@ -3,7 +3,7 @@ import 'package:guardian_project/common/base_page.dart';
 import 'package:guardian_project/common/widget/sound_level_widget.dart';
 import 'package:guardian_project/pages/sound_configuration/sound_configuration_controller.dart';
 
-/// **Page : SoundConfiguration**
+/// ## Page : Sound Configuration
 ///
 /// Widget that create the sound configuration/visualisation page
 ///
@@ -18,6 +18,13 @@ class SoundConfigurationPage extends BasePage<SoundConfigurationController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: TextFormField(
+                  initialValue: pageController.stateData.hotSentence,
+                  onFieldSubmitted: (value) => pageController.updateHotSentence(value),
+                ),
+              ),
               Expanded(
                 child: StreamSoundLevelViewer(
                   getLevelDetectorMeanValue: () => pageController.getDetectionLevel(),
@@ -31,7 +38,7 @@ class SoundConfigurationPage extends BasePage<SoundConfigurationController> {
               ),
               FloatingActionButton(
                   onPressed: pageController.switchOnOffSubscription,
-                  child: Icon(pageController.isSubscriptionActive() ? Icons.mic_none_outlined : Icons.stop)),
+                  child: Icon(pageController.isSubscriptionActive() ? Icons.mic : Icons.mic_none)),
             ],
           ),
         ),
