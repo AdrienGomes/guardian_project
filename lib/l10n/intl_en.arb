@@ -1,18 +1,17 @@
 {
-    "app_bar_title_home_page": "Home Page",
-    "app_bar_title_sound_configuration_page": "Sound Conf.",
-    "home_page_button_state_on_label": "Activated",
-    "home_page_button_state_off_label": "Deactivated",
-    "sound_controller_page_default_hot_sentence": "Hello world",
-    "sound_configuration_hot_sentence_recognized_toast_label" : "Hot sentence : {hotSentence} has been recognized",
-    "@sound_configuration_hot_sentence_recognized_toast_label": {
-      "placeholders": {
-        "hotSentence": {
-          "type": "String"
-        }
+  "app_bar_title_home_page": "Home Page",
+  "app_bar_title_sound_configuration_page": "Sound Conf.",
+  "home_page_button_state_on_label": "Activated",
+  "home_page_button_state_off_label": "Deactivated",
+  "sound_controller_page_default_hot_sentence": "Hello world",
+  "sound_configuration_hot_sentence_recognized_toast_label": "Hot sentence : {hotSentence} has been recognized",
+  "@sound_configuration_hot_sentence_recognized_toast_label": {
+    "placeholders": {
+      "hotSentence": {
+        "type": "String"
       }
-    },
-    "level_indicator_gap_detected_label": "Gap detected"
-
-    
-  }
+    }
+  },
+  "level_indicator_gap_detected_label": "Gap detected",
+  "background_task_service_already_alive_task_error_label": "Task is already alive, can't launch another one"
+}

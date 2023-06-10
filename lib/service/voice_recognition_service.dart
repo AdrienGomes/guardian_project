@@ -19,6 +19,9 @@ class VoiceRecognitionService {
   /// minimum confidence trust
   static const double _confidenceMinimumTrust = 0.7;
 
+  /// if true, means the microphones needs to be freed
+  bool needMicOff = false;
+
   final ToastService _toastService;
   final SoundMeterService _soundMeterService;
 
@@ -44,6 +47,7 @@ class VoiceRecognitionService {
     // initialize speech recognition
     final available = await _speech.initialize(
       debugLogging: true,
+      finalTimeout: _listeningSessionTimeOut,
       onStatus: _handleStatus,
       onError: (val) => _handleStatus(val.errorMsg),
     );
@@ -51,6 +55,7 @@ class VoiceRecognitionService {
       _speech.listen(
         listenFor: _listeningSessionTimeOut,
         listenMode: stt.ListenMode.dictation,
+        sampleRate: 44100, // android value, might need to change when attempting using it with IOS
         onResult: (result) {
           final recognizedWords = result.recognizedWords;
           if (result.isConfident(threshold: _confidenceMinimumTrust)) {
@@ -78,19 +83,20 @@ class VoiceRecognitionService {
       case ListeningStatus.done:
       case ListeningStatus.notListening:
         {
-          if (!_soundMeterService.isRecording) _soundMeterService.start();
+          needMicOff = false;
           break;
         }
       case ListeningStatus.listening:
         {
-          if (_soundMeterService.isRecording) _soundMeterService.stop();
+          needMicOff = true;
+          _soundMeterService.askForPause(_listeningSessionTimeOut, interruptionCallabck: () => !needMicOff);
           break;
         }
       default:
         {
           _toastService.showToast(textStatus, criticity: ToastCriticity.error);
           _speech.cancel();
-          if (!_soundMeterService.isRecording) _soundMeterService.start();
+          needMicOff = false;
         }
     }
   }

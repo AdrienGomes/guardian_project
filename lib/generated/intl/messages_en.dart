@@ -29,6 +29,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Home Page"),
         "app_bar_title_sound_configuration_page":
             MessageLookupByLibrary.simpleMessage("Sound Conf."),
+        "background_task_service_already_alive_task_error_label":
+            MessageLookupByLibrary.simpleMessage(
+                "Task is already alive, can\'t launch another one"),
         "home_page_button_state_off_label":
             MessageLookupByLibrary.simpleMessage("Deactivated"),
         "home_page_button_state_on_label":

@@ -1,22 +1,26 @@
 import 'package:guardian_project/common/base_page.dart';
-import 'package:guardian_project/service/sound_meter_service.dart';
+import 'package:guardian_project/service/workmanager_service.dart';
 import 'package:guardian_project/service_locator.dart';
 
 /// ## [HomePage] controller
 class HomePageController extends BaseViewPageController<_StateHomePageController> {
   HomePageController() : super(_StateHomePageController());
 
-  /// toast service
-  late final SoundMeterService _soundMeterService;
+  /// background task service
+  late final BackgroundTaskService _backgroundTaskService;
 
   @override
   void initAsync() {
-    _soundMeterService = serviceLocator<SoundMeterService>();
+    _backgroundTaskService = serviceLocator<BackgroundTaskService>();
   }
 
-  /// activate or deactivate sound meter service
-  void switchOnOffSoundMeterService() {
-    isSoundServiceOn() ? _soundMeterService.stop() : _soundMeterService.start();
+  /// activate or deactivate the background task
+  void activateBackgroundProtectionTask() {
+    if (_backgroundTaskService.taskIsAlive) {
+      _backgroundTaskService.cancelTaskAsync();
+    } else {
+      _backgroundTaskService.startTaskAsync();
+    }
     notifyListeners();
   }
 
@@ -26,8 +30,8 @@ class HomePageController extends BaseViewPageController<_StateHomePageController
   //   await FlutterPhoneDirectCaller.callNumber(number);
   // }
 
-  /// get the [SoundMeterService] recording state
-  bool isSoundServiceOn() => _soundMeterService.isRecording;
+  /// get the [BackgroundTaskService] task state
+  bool isProtectionOn() => _backgroundTaskService.taskIsAlive;
 
   @override
   void onHide() {}
