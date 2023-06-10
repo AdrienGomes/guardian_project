@@ -29,6 +29,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Acceuil"),
         "app_bar_title_sound_configuration_page":
             MessageLookupByLibrary.simpleMessage("Conf. Son"),
+        "background_task_service_already_alive_task_error_label":
+            MessageLookupByLibrary.simpleMessage(
+                "Une tâche est déjà active, impossible d\'en lancer une seconde"),
         "home_page_button_state_off_label":
             MessageLookupByLibrary.simpleMessage("Désactivé"),
         "home_page_button_state_on_label":

@@ -24,6 +24,16 @@ void main() {
   // init dependency injection
   ServiceLocator.init();
 
+  // TODO : Create a logging service
+  // FlutterError.onError = (details) {
+  //   FlutterError.presentError(details);
+  //   serviceLocator<ToastService>().showToast(details.exception.toString(), criticity: ToastCriticity.error);
+  // };
+  // PlatformDispatcher.instance.onError = (error, stack) {
+  //   serviceLocator<ToastService>().showToast(error.toString(), criticity: ToastCriticity.error);
+  //   return true;
+  // };
+
   // run app
   runApp(const GuardianApp());
 }

@@ -6,13 +6,17 @@ import 'package:flutter/services.dart';
 
 /// ## Sound level detector service
 ///
-/// **Purpose : get info on sound/noise level from microphone **
+/// **Purpose : get info on sound/noise level from microphone**
 ///
 /// To use it, subscribe to it by using the [subscribeTo] method. This will return a [StreamSubscription] with [NoiseReading] from the microphone.
 ///
 /// The service allows to manipulate a subscription, by removing it ([removeSubscription]), stalling it ([pauseSubscription]) and resuming it ([resumeSubscription])
 class SoundMeterService {
+  /// true if any subscription is listening to the microphone
   bool get isRecording => _subscriptions.values.any((sub) => !sub.isPaused);
+
+  /// interrupting timer periode. Used when asking for a pause
+  static const interruptingTimerPeriode = Duration(milliseconds: 100);
 
   /// Map of subscriptions to this service
   final Map<int, StreamSubscription<NoiseReading>> _subscriptions = {};
@@ -22,39 +26,52 @@ class SoundMeterService {
   /// base ctor
   SoundMeterService.init() {
     _noiseMeter = NoiseMeter(_onError);
+    _updateNoiseMeter();
   }
 
-  /// starts listening
-  void start() async {
-    try {
-      if (_noiseMeter.isStoped) _noiseMeter._start();
-      _subscriptions.forEach((_, value) => value.resume());
-    } catch (err) {
-      _onError(err);
-    }
-  }
+  /// ask for a global pause of this service. allow to specify an interruption callback (checked every 100 milliseconds)
+  void askForPause(Duration duration, {bool Function()? interruptionCallabck}) {
+    // pause all subscriptions
+    _pauseAllSubscriptions();
 
-  /// stops listening to subscriptions
-  void stop() async {
-    try {
-      /// stall all subscriptions
-      _subscriptions.forEach((key, _) => _stallSubscription(key));
-      _safeStop();
-    } catch (err) {
-      _onError(err);
+    // launch a timer that will resume every subscriptions once duration is over
+    final pausingTimer = Timer(duration, _resumeAllSubscriptions);
+
+    // if an interrupting callback is specified, launch a periodic timer that will resume every subscriptions accordingly to the callback result
+    if (interruptionCallabck != null) {
+      Timer.periodic(interruptingTimerPeriode, (timer) {
+        if (interruptionCallabck.call() && pausingTimer.isActive) {
+          _resumeAllSubscriptions();
+          pausingTimer.cancel();
+        }
+      });
     }
   }
 
   /// Resume a single subscription (identify by its id)
   void resumeSubscription(int hashCode) {
-    if (_noiseMeter.isStoped) _noiseMeter._start();
     _subscriptions[hashCode]?.resume();
+    _updateNoiseMeter();
+  }
+
+  /// pause all subscriptions
+  void _resumeAllSubscriptions() {
+    for (final sub in _subscriptions.values) {
+      resumeSubscription(sub.hashCode);
+    }
   }
 
   /// Pause a single subscription (identify by its id)
   void pauseSubscription(int hashCode) {
-    _stallSubscription(hashCode);
-    _safeStop();
+    _subscriptions[hashCode]?.pause();
+    _updateNoiseMeter();
+  }
+
+  /// pause all subscriptions
+  void _pauseAllSubscriptions() {
+    for (final sub in _subscriptions.values) {
+      pauseSubscription(sub.hashCode);
+    }
   }
 
   /// remove a subscription
@@ -75,24 +92,24 @@ class SoundMeterService {
     return subscription;
   }
 
-  /// stop recording if all the subscriptions are paused
-  void _safeStop() {
-    if (!_subscriptions.values.any((sub) => !sub.isPaused)) {
+  /// according to the number of active subscriptions, update the NoiseMeter object (handling the microphone) state
+  void _updateNoiseMeter() {
+    if (_subscriptions.values.any((sub) => !sub.isPaused) && _noiseMeter.isStoped) {
+      _noiseMeter._start();
+    } else if ((_subscriptions.values.every((sub) => sub.isPaused) || _subscriptions.values.isEmpty) &&
+        !_noiseMeter.isStoped) {
       _noiseMeter._stop();
     }
   }
 
   /// callback when an error occurs while reading data
-  void _onError(Object error) {}
+  void _onError(Object error) {
+    _pauseAllSubscriptions();
+  }
 
   /// add a new subscription
   void _addSubscription(StreamSubscription<NoiseReading> subscription) =>
       _subscriptions[subscription.hashCode] = subscription;
-
-  /// pause a subscription
-  void _stallSubscription(int hashCode) {
-    _subscriptions[hashCode]?.pause();
-  }
 }
 
 /// Holds a decibel value for a noise level reading.

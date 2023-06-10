@@ -120,6 +120,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Task is already alive, can't launch another one`
+  String get background_task_service_already_alive_task_error_label {
+    return Intl.message(
+      'Task is already alive, can\'t launch another one',
+      name: 'background_task_service_already_alive_task_error_label',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

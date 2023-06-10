@@ -33,8 +33,8 @@ class HomePage extends BasePage<HomePageController> {
             height: 200,
             child: BouncingStateButton(
               buttonSize: const Size(250, 250),
-              onPressed: pageController.switchOnOffSoundMeterService,
-              getState: pageController.isSoundServiceOn,
+              onPressed: pageController.activateBackgroundProtectionTask,
+              getState: pageController.isProtectionOn,
               stateOnbuttonGradiantColor: GuardianThemeColor.buttonSatetOnGradient,
               stateOnButtonLabel: tr.home_page_button_state_on_label,
               stateOffButtonLabel: tr.home_page_button_state_off_label,
