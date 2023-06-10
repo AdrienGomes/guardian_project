@@ -89,6 +89,37 @@ class S {
       args: [],
     );
   }
+
+  /// `Hello world`
+  String get sound_controller_page_default_hot_sentence {
+    return Intl.message(
+      'Hello world',
+      name: 'sound_controller_page_default_hot_sentence',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hot sentence : {hotSentence} has been recognized`
+  String sound_configuration_hot_sentence_recognized_toast_label(
+      String hotSentence) {
+    return Intl.message(
+      'Hot sentence : $hotSentence has been recognized',
+      name: 'sound_configuration_hot_sentence_recognized_toast_label',
+      desc: '',
+      args: [hotSentence],
+    );
+  }
+
+  /// `Gap detected`
+  String get level_indicator_gap_detected_label {
+    return Intl.message(
+      'Gap detected',
+      name: 'level_indicator_gap_detected_label',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

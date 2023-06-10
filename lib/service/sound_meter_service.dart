@@ -4,8 +4,14 @@ import 'dart:math';
 import 'package:audio_streamer/audio_streamer.dart';
 import 'package:flutter/services.dart';
 
-/// Sound meter service to get info on sound/noise level from microphone
-class NoiseMeterService {
+/// ## Sound level detector service
+///
+/// **Purpose : get info on sound/noise level from microphone **
+///
+/// To use it, subscribe to it by using the [subscribeTo] method. This will return a [StreamSubscription] with [NoiseReading] from the microphone.
+///
+/// The service allows to manipulate a subscription, by removing it ([removeSubscription]), stalling it ([pauseSubscription]) and resuming it ([resumeSubscription])
+class SoundMeterService {
   bool get isRecording => _subscriptions.values.any((sub) => !sub.isPaused);
 
   /// Map of subscriptions to this service
@@ -14,14 +20,14 @@ class NoiseMeterService {
   late final NoiseMeter _noiseMeter;
 
   /// base ctor
-  NoiseMeterService.init() {
+  SoundMeterService.init() {
     _noiseMeter = NoiseMeter(_onError);
   }
 
   /// starts listening
   void start() async {
     try {
-      _noiseMeter._start();
+      if (_noiseMeter.isStoped) _noiseMeter._start();
       _subscriptions.forEach((_, value) => value.resume());
     } catch (err) {
       _onError(err);
@@ -41,14 +47,20 @@ class NoiseMeterService {
 
   /// Resume a single subscription (identify by its id)
   void resumeSubscription(int hashCode) {
-    _noiseMeter._start();
+    if (_noiseMeter.isStoped) _noiseMeter._start();
     _subscriptions[hashCode]?.resume();
   }
 
   /// Pause a single subscription (identify by its id)
   void pauseSubscription(int hashCode) {
-    _subscriptions[hashCode]?.pause();
+    _stallSubscription(hashCode);
     _safeStop();
+  }
+
+  /// remove a subscription
+  void removeSubscription(int hashCode) {
+    pauseSubscription(hashCode);
+    _subscriptions.removeWhere((key, value) => key == hashCode);
   }
 
   /// subscribe a stream to this soundMeter service
@@ -77,7 +89,7 @@ class NoiseMeterService {
   void _addSubscription(StreamSubscription<NoiseReading> subscription) =>
       _subscriptions[subscription.hashCode] = subscription;
 
-  /// remove a subscription
+  /// pause a subscription
   void _stallSubscription(int hashCode) {
     _subscriptions[hashCode]?.pause();
   }
@@ -119,6 +131,8 @@ class NoiseMeter {
   late StreamController<NoiseReading> _controller;
   Stream<NoiseReading>? _stream;
 
+  bool isStoped = true;
+
   // The error callback function.
   Function? onError;
 
@@ -155,11 +169,15 @@ class NoiseMeter {
   void _start() async {
     try {
       _streamer.start(_onAudio, _onInternalError);
+      isStoped = false;
     } catch (error) {
       //print(error);
     }
   }
 
   /// Stop noise monitoring
-  void _stop() async => await _streamer.stop();
+  void _stop() async {
+    await _streamer.stop();
+    isStoped = true;
+  }
 }

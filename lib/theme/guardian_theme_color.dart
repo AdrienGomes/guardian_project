@@ -5,7 +5,7 @@ abstract class GuardianThemeColor {
   // ----------------- static colors ----------------------
 
   // background colors
-  static const Color darkBackgroundColor = Color.fromARGB(255, 178, 176, 255);
+  static const Color darkBackgroundColor = Color.fromARGB(255, 55, 51, 145);
   static const Color lightBackgroundColor = Color.fromARGB(255, 164, 223, 255);
   static const Color navigationBarBackgroundColor = Color.fromARGB(255, 59, 125, 161);
 

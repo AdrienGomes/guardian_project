@@ -3,7 +3,7 @@ import 'package:guardian_project/service/sound_meter_service.dart';
 // ignore: depend_on_referenced_packages
 import 'package:collection/collection.dart';
 
-/// ## Noise level detector service
+/// ## Sound level detector service
 ///
 /// **Purpose : detect when the average surrounding noise level has significantly changed**
 ///
@@ -11,7 +11,7 @@ import 'package:collection/collection.dart';
 ///
 /// To use it, call
 /// ```serviceLocator<NoiseLevelDetector>().watcher```, witch returns a stream of boolean
-class NoiseLevelDetectorService {
+class SoundLevelDetectorService {
   // constants for gliding windows
   static const _glidingWindowSize = 100;
   static const _glidingPeakEventSize = 6;
@@ -25,15 +25,15 @@ class NoiseLevelDetectorService {
   /// [Stream] that returns a boolean whether or not the level has significantly changed
   late final Stream<bool> watcher;
 
-  /// The mean value of this [NoiseLevelDetectorService]
+  /// The mean value of this [SoundLevelDetectorService]
   double get meanValue => _glidingRecordWindow.getMean();
 
   late final _GlidingList<double, bool> _glidingRecordWindow;
 
-  final NoiseMeterService _soundMeterService;
+  final SoundMeterService _soundMeterService;
   StreamSubscription<NoiseReading>? _soundMeterServiceSubscription;
 
-  NoiseLevelDetectorService.init(this._soundMeterService) {
+  SoundLevelDetectorService.init(this._soundMeterService) {
     // subscribe to sound meter service
     _soundMeterServiceSubscription ??= _soundMeterService.subscribeTo(StreamController()
       ..stream.listen((event) {
@@ -65,7 +65,7 @@ class NoiseLevelDetectorService {
     // if maximum/minimum amount of peak values is reached -> changed the _tresholdReached value
     if (_countReachedTreshold == _glidingPeakEventSize) {
       _tresholdReached = true;
-    } else if (_countReachedTreshold == 0) {
+    } else {
       _tresholdReached = false;
     }
 

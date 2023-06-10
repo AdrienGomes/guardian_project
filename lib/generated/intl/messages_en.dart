@@ -20,6 +20,9 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
+  static String m0(hotSentence) =>
+      "Hot sentence : ${hotSentence} has been recognized";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "app_bar_title_home_page":
@@ -29,6 +32,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "home_page_button_state_off_label":
             MessageLookupByLibrary.simpleMessage("Deactivated"),
         "home_page_button_state_on_label":
-            MessageLookupByLibrary.simpleMessage("Activated")
+            MessageLookupByLibrary.simpleMessage("Activated"),
+        "level_indicator_gap_detected_label":
+            MessageLookupByLibrary.simpleMessage("Gap detected"),
+        "sound_configuration_hot_sentence_recognized_toast_label": m0,
+        "sound_controller_page_default_hot_sentence":
+            MessageLookupByLibrary.simpleMessage("Hello world")
       };
 }
