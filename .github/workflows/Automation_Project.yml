@@ -58,7 +58,7 @@ jobs:
           gh_token: ${{ secrets.SECRET_TOKEN }}
           user: AdrienGomes
           project_id: 1
-          resource_node_id: ${{ github.event.issue.node_id }}
+          resource_node_id: ${{ github.event.pull_request.node_id }}
           status_value: ${{ env.in_progress }}
   pr_in_review:
     name: pr_in_review
@@ -71,7 +71,7 @@ jobs:
           gh_token: ${{ secrets.SECRET_TOKEN }}
           user: AdrienGomes
           project_id: 1
-          resource_node_id: ${{ github.event.issue.node_id }}
+          resource_node_id: ${{ github.event.pull_request.node_id }}
           status_value: ${{ env.in_review }}
   pr_closed:
     name: pr_closed
@@ -84,5 +84,5 @@ jobs:
           gh_token: ${{ secrets.SECRET_TOKEN }}
           user: AdrienGomes
           project_id: 1
-          resource_node_id: ${{ github.event.issue.node_id }}
+          resource_node_id: ${{ github.event.pull_request.node_id }}
           status_value: ${{ env.done }}
