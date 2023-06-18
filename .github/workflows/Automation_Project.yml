@@ -5,6 +5,8 @@ on:
       - opened
       - reopened
       - closed
+      - assigned
+      - unassigned
   pull_request:
     types:
       - opened
@@ -25,6 +27,32 @@ jobs:
     name: issue_opened
     runs-on: ubuntu-latest
     if: github.event_name == 'issues' && github.event.action == 'opened'
+    steps:
+      - name: Move issue to ${{ env.todo }}
+        uses: leonsteinhaeuser/project-beta-automations@v2.0.1
+        with:
+          gh_token: ${{ secrets.SECRET_TOKEN }}
+          user: AdrienGomes
+          project_id: 1
+          resource_node_id: ${{ github.event.issue.node_id }}
+          status_value: ${{ env.todo }}
+  issue_assigned:
+    name: issue_assigned
+    runs-on: ubuntu-latest
+    if: github.event_name == 'issues' && github.event.action == 'assigned'
+    steps:
+      - name: Move issue to ${{ env.in_progress }}
+        uses: leonsteinhaeuser/project-beta-automations@v2.0.1
+        with:
+          gh_token: ${{ secrets.SECRET_TOKEN }}
+          user: AdrienGomes
+          project_id: 1
+          resource_node_id: ${{ github.event.issue.node_id }}
+          status_value: ${{ env.in_progress }}
+  issue_unassigned:
+    name: issue_unassigned
+    runs-on: ubuntu-latest
+    if: github.event_name == 'issues' && github.event.action == 'unassigned'
     steps:
       - name: Move issue to ${{ env.todo }}
         uses: leonsteinhaeuser/project-beta-automations@v2.0.1
