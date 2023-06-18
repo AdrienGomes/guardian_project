@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:guardian_project/common/base_async_state.dart';
 import 'package:provider/provider.dart';
 
@@ -14,6 +14,9 @@ abstract class BasePopingPage<T extends BasePopingPageController> extends Statel
   /// page controller as [BasePageController]
   final T pageController;
 
+  /// page title
+  final String title;
+
   /// As [BasePopingPage] always use [WillPopScope], the onWillPop callback is required to build
   ///
   /// It's a callback that will be called whenever the back process is called
@@ -22,13 +25,19 @@ abstract class BasePopingPage<T extends BasePopingPageController> extends Statel
   /// Build the inner content of the page
   Widget getContent(BuildContext context);
 
-  const BasePopingPage({super.key, required this.pageController});
+  const BasePopingPage(this.pageController, this.title, {super.key});
 
   @override
   Widget build(BuildContext context) => WillPopScope(
       onWillPop: onWillPop,
       child: ChangeNotifierProvider<T>.value(
-          value: pageController, child: Consumer<T>(builder: (context, controller, _) => getContent(context))));
+          value: pageController,
+          child: Consumer<T>(
+              builder: (context, controller, _) => Scaffold(
+                  appBar: AppBar(
+                    title: Text(this.title),
+                  ),
+                  body: getContent(context)))));
 }
 
 // -------------------------------------------------------------
@@ -40,8 +49,8 @@ abstract class BasePopingPage<T extends BasePopingPageController> extends Statel
 // -------------------------------------------------------------
 
 /// Base class to create a page
-abstract class BasePage<T extends BaseViewPageController> extends StatelessWidget {
-  const BasePage(this.pageController, {super.key});
+abstract class BaseViewPage<T extends BaseViewPageController> extends StatelessWidget {
+  const BaseViewPage(this.pageController, {super.key});
 
   /// It's a callback that will be called whenever the page is hidden
   void onHide() => pageController.onHide();
@@ -52,9 +61,6 @@ abstract class BasePage<T extends BaseViewPageController> extends StatelessWidge
   /// Build the inner content of the page
   Widget getContent(BuildContext context);
 
-  // /// method that will be called
-  // void onHide();
-
   /// page controller as [BasePageController]
   final T pageController;
 
@@ -63,7 +69,7 @@ abstract class BasePage<T extends BaseViewPageController> extends StatelessWidge
       value: pageController, child: Consumer<T>(builder: (context, controller, _) => getContent(context)));
 }
 
-/// Controller to hold [BasePage] logic
+/// Controller to hold [BaseViewPage] logic
 abstract class BaseViewPageController<T extends BasePageControllerState> extends BasePageController<T> {
   BaseViewPageController(super.stateData);
 
@@ -125,6 +131,3 @@ abstract class BasePageController<T extends BasePageControllerState> extends Cha
     notifyListeners();
   }
 }
-
-/// Base state to use with [BasePage]
-abstract class BasePageControllerState extends BaseAsyncState {}

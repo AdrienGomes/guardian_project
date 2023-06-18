@@ -1,5 +1,9 @@
 import 'package:get_it/get_it.dart';
+import 'package:guardian_project/bootstrap/base_bootstrap.dart';
+import 'package:guardian_project/bootstrap/bootstrap_manager.dart';
+import 'package:guardian_project/bootstrap/db_initializer_bootstrap.dart';
 import 'package:guardian_project/main.dart';
+import 'package:guardian_project/service/db_client_service.dart';
 import 'package:guardian_project/service/sound_detector_service.dart';
 import 'package:guardian_project/service/sound_meter_service.dart';
 import 'package:guardian_project/service/toast_service.dart';
@@ -17,6 +21,7 @@ class ServiceLocator {
   /// base ctor
   ServiceLocator.init() {
     _initServices();
+    _registerBootStrapServices();
     _handleRequiredPermission();
   }
 
@@ -35,6 +40,8 @@ class ServiceLocator {
     serviceLocator.registerSingleton(VoiceRecognitionService.init(toastServiceInstance, soundMeterServiceInstance));
     // register bacground task manager Service
     serviceLocator.registerSingleton(BackgroundTaskService.init(toastServiceInstance));
+    // register db service
+    serviceLocator.registerSingleton(DbClientService.init());
 
     // ---------------------------------------------------------
     // Factory services
@@ -42,6 +49,15 @@ class ServiceLocator {
 
     // register sound level detector service
     serviceLocator.registerFactory(() => SoundLevelDetectorService.init(soundMeterServiceInstance));
+  }
+
+  /// register [BaseBootStarp] services
+  void _registerBootStrapServices() {
+    /// list of bootstrap services
+    final bootstrapServices = [DbInitializerBootstrap.init()];
+
+    /// register DB bootstraper
+    serviceLocator.registerFactory<BootStrapManager>(() => BootStrapManager.init(bootstrapServices));
   }
 
   /// handle all the required permission

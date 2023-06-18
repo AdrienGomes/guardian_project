@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:guardian_project/bootstrap/bootstrap_manager.dart';
 import 'package:guardian_project/common/base_page.dart';
 import 'package:guardian_project/generated/l10n.dart';
 import 'package:guardian_project/intl.dart';
 import 'package:guardian_project/pages/home_page/home_page.dart';
 import 'package:guardian_project/pages/sound_configuration/sound_configuration_page.dart';
 import 'package:guardian_project/service_locator.dart';
-import 'package:guardian_project/theme/theme.dart';
+import 'package:guardian_project/common/widget/theme/theme.dart';
 
 // global navigator key
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -18,11 +19,14 @@ GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 @pragma('vm:entry-point')
 void Function()? callbackDispatcher;
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // init dependency injection
   ServiceLocator.init();
+
+  /// realise all bootstrap actions once serviceLocator up
+  await serviceLocator<BootStrapManager>().onBoot();
 
   // TODO : Create a logging service
   // FlutterError.onError = (details) {
@@ -133,7 +137,7 @@ class _StateNavigationBottomBar extends State<NavigationBottomBar> with SingleTi
 
   /// builds a single navigation bar entry ([NavigationEntry])
   NavigationEntry _buildNavigationEntry(
-          {required BasePage destinationPage,
+          {required BaseViewPage destinationPage,
           required String title,
           required IconData icon,
           Color? iconColor,
@@ -149,7 +153,7 @@ class _StateNavigationBottomBar extends State<NavigationBottomBar> with SingleTi
 ///
 /// To use with [NavigationBar]
 class NavigationEntry {
-  final BasePage destinationBuilder;
+  final BaseViewPage destinationBuilder;
   final BottomNavigationBarItem navigationBarItem;
   final String title;
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:guardian_project/theme/theme.dart';
+import 'package:guardian_project/common/widget/theme/theme.dart';
 import 'dart:math' as math show sin, pi, sqrt;
 
 /// creates a bouncing button

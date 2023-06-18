@@ -49,11 +49,18 @@ dependencies:
   # background task managing package
   workmanager: ^0.5.1
   # internationalisation package
-  intl: ^0.18.0
+  intl: ^0.17.0
   # SpeechToText package
   speech_to_text: ^6.1.1
   # permission handling package
   permission_handler: ^10.2.0
+  # db handling packages
+  sqfentity: ^2.2.0+6
+  sqfentity_gen: ^2.2.0+12
+  # to use http queries
+  http: ^0.13.6
+  # to generate guids
+  uuid: ^3.0.7
 
 dev_dependencies:
   flutter_test:
@@ -66,13 +73,16 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
 
+  # allow to trigger builds
+  build_runner: ^2.3.3
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 # The following section is specific to Flutter packages.
 flutter:
   assets:
     - assets/images/
-  generate: true
+  generate: false
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

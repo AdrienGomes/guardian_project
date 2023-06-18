@@ -21,3 +21,6 @@ abstract class BaseAsyncState {
   /// get the error formatted as string
   String getFormattedError() => _error.toString();
 }
+
+/// Base state to use with [BaseViewPage]
+abstract class BasePageControllerState extends BaseAsyncState {}
