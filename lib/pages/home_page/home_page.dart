@@ -3,14 +3,14 @@ import 'package:guardian_project/common/base_page.dart';
 import 'package:guardian_project/common/widget/ripple_button.dart';
 import 'package:guardian_project/intl.dart';
 import 'package:guardian_project/pages/home_page/home_page_controller.dart';
-import 'package:guardian_project/theme/guardian_theme_color.dart';
+import 'package:guardian_project/common/widget/theme/guardian_theme_color.dart';
 
 /// ## Page : Home Page
 ///
 /// This page shows a button that enable the guardian background service
 ///
-/// *See [BasePage]*
-class HomePage extends BasePage<HomePageController> {
+/// *See [BaseViewPage]*
+class HomePage extends BaseViewPage<HomePageController> {
   HomePage({super.key}) : super(HomePageController());
 
   static const _animatedContainerAnimationDuration = Duration(milliseconds: 300);

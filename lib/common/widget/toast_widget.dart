@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:guardian_project/service/toast_service.dart';
 import 'package:guardian_project/service_locator.dart';
-import 'package:guardian_project/theme/guardian_theme_color.dart';
+import 'package:guardian_project/common/widget/theme/guardian_theme_color.dart';
 
 class CustomToast extends StatelessWidget {
   final ToastMessage message;

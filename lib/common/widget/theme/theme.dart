@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:guardian_project/theme/guardian_theme_color.dart';
+import 'package:guardian_project/common/widget/theme/guardian_theme_color.dart';
 
 /// Guardian app theme
 class GuardianTheme {
