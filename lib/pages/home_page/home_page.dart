@@ -31,7 +31,7 @@ class HomePage extends BaseViewPage<HomePageController> {
           child: SizedBox(
             width: 200,
             height: 200,
-            child: BouncingStateButton(
+            child: RippleButton(
               buttonSize: const Size(250, 250),
               onPressed: pageController.activateBackgroundProtectionTask,
               getState: pageController.isProtectionOn,

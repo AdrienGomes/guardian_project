@@ -6,6 +6,7 @@ import 'package:guardian_project/common/base_page.dart';
 import 'package:guardian_project/generated/l10n.dart';
 import 'package:guardian_project/intl.dart';
 import 'package:guardian_project/pages/home_page/home_page.dart';
+import 'package:guardian_project/pages/listening_profile/listening_profiles_page.dart';
 import 'package:guardian_project/pages/sound_configuration/sound_configuration_page.dart';
 import 'package:guardian_project/service_locator.dart';
 import 'package:guardian_project/common/widget/theme/theme.dart';
@@ -130,9 +131,13 @@ class _StateNavigationBottomBar extends State<NavigationBottomBar> with SingleTi
   List<NavigationEntry> _getNavigationEntries() => [
         _buildNavigationEntry(destinationPage: HomePage(), title: tr.app_bar_title_home_page, icon: Icons.safety_check),
         _buildNavigationEntry(
+            destinationPage: ListeningProfilesPage(),
+            title: tr.app_bar_title_listening_profile_page,
+            icon: Icons.hearing),
+        _buildNavigationEntry(
             destinationPage: SoundConfigurationPage(),
             title: tr.app_bar_title_sound_configuration_page,
-            icon: Icons.equalizer)
+            icon: Icons.graphic_eq)
       ];
 
   /// builds a single navigation bar entry ([NavigationEntry])

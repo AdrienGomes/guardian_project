@@ -1,5 +1,6 @@
 {
   "app_bar_title_home_page": "Acceuil",
+  "app_bar_title_listening_profile_page": "Profiles d'écoute",
   "app_bar_title_sound_configuration_page": "Conf. Son",
   "home_page_button_state_on_label": "Activé",
   "home_page_button_state_off_label": "Désactivé",
@@ -13,5 +14,8 @@
     }
   },
   "level_indicator_gap_detected_label": "Différence détectée",
-  "background_task_service_already_alive_task_error_label": "Une tâche est déjà active, impossible d'en lancer une seconde"
+  "background_task_service_already_alive_task_error_label": "Une tâche est déjà active, impossible d'en lancer une seconde",
+  "common_delete_label": "Delete",
+  "common_edit_label": "Modifier",
+  "common_new_profile_label": "Nouveau Profile"
 }

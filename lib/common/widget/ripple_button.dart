@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:guardian_project/common/widget/theme/theme.dart';
 import 'dart:math' as math show sin, pi, sqrt;
 
-/// creates a bouncing button
-class BouncingStateButton extends StatefulWidget {
+/// creates a button with ripple effect that manage states
+class RippleButton extends StatefulWidget {
   final Icon stateOnIcon;
   final Icon stateOffIcon;
 
@@ -17,7 +17,7 @@ class BouncingStateButton extends StatefulWidget {
   final void Function() onPressed;
   final bool Function() getState;
 
-  const BouncingStateButton({
+  const RippleButton({
     super.key,
     required this.stateOnIcon,
     required this.stateOffIcon,
@@ -31,10 +31,10 @@ class BouncingStateButton extends StatefulWidget {
   });
 
   @override
-  State<BouncingStateButton> createState() => _BouncingStateButtonState();
+  State<RippleButton> createState() => _RippleButtonState();
 }
 
-class _BouncingStateButtonState extends State<BouncingStateButton> with SingleTickerProviderStateMixin {
+class _RippleButtonState extends State<RippleButton> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
   late bool _isButtonPressed;

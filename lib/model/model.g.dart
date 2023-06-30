@@ -1,7 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// ignore_for_file: prefer_const_declarations, no_leading_underscores_for_local_identifiers
-
 part of 'model.dart';
 
 // **************************************************************************
@@ -86,10 +84,16 @@ class TableListeningSessionHotWord extends SqfEntityTableBase {
 
     // declare fields
     fields = [
-      SqfEntityFieldRelationshipBase(TableListeningSession.getInstance, DeleteRule.CASCADE,
-          relationType: RelationType.ONE_TO_MANY, fieldName: 'listeningSessionTechId_', isPrimaryKeyField: true),
-      SqfEntityFieldRelationshipBase(TableHotWord.getInstance, DeleteRule.CASCADE,
-          relationType: RelationType.ONE_TO_MANY, fieldName: 'hotWordTechId_', isPrimaryKeyField: true),
+      SqfEntityFieldRelationshipBase(
+          TableListeningSession.getInstance, DeleteRule.CASCADE,
+          relationType: RelationType.ONE_TO_MANY,
+          fieldName: 'listeningSessionTechId_',
+          isPrimaryKeyField: true),
+      SqfEntityFieldRelationshipBase(
+          TableHotWord.getInstance, DeleteRule.CASCADE,
+          relationType: RelationType.ONE_TO_MANY,
+          fieldName: 'hotWordTechId_',
+          isPrimaryKeyField: true),
       SqfEntityFieldBase('listeningSessionName', DbType.text),
       SqfEntityFieldBase('hotWordName', DbType.text),
     ];
@@ -107,7 +111,8 @@ class TableListeningSessionHotWord extends SqfEntityTableBase {
 class SequenceRownumberSequence extends SqfEntitySequenceBase {
   SequenceRownumberSequence() {
     sequenceName = 'rowNumber';
-    maxValue = 10000; /* optional. default is max int (9.223.372.036.854.775.807) */
+    maxValue =
+        10000; /* optional. default is max int (9.223.372.036.854.775.807) */
     cycle = false; /* optional. default is false; */
     minValue = 0; /* optional. default is 0 */
     incrementBy = 1; /* optional. default is 1 */
@@ -158,10 +163,12 @@ class HotWord extends TableBase {
     _setDefaultValues();
     softDeleteActivated = false;
   }
-  HotWord.withFields(this.techId_, this.name, this.value, this.listeningSessionName) {
+  HotWord.withFields(
+      this.techId_, this.name, this.value, this.listeningSessionName) {
     _setDefaultValues();
   }
-  HotWord.withId(this.techId_, this.name, this.value, this.listeningSessionName) {
+  HotWord.withId(
+      this.techId_, this.name, this.value, this.listeningSessionName) {
     _setDefaultValues();
   }
   // fromMap v2.0
@@ -196,10 +203,12 @@ class HotWord extends TableBase {
   List<ListeningSession>? plListeningSessions;
 
   /// get ListeningSession(s) filtered by listeningSessionTechId_ IN listeningSessionHotWord
-  ListeningSessionFilterBuilder? getListeningSessions({List<String>? columnsToSelect, bool? getIsDeleted}) {
+  ListeningSessionFilterBuilder? getListeningSessions(
+      {List<String>? columnsToSelect, bool? getIsDeleted}) {
     return ListeningSession()
         .select(columnsToSelect: columnsToSelect, getIsDeleted: getIsDeleted)
-        .where('techId_ IN (SELECT listeningSessionTechId_ FROM listeningSessionHotWord WHERE hotWordTechId_=?)',
+        .where(
+            'techId_ IN (SELECT listeningSessionTechId_ FROM listeningSessionHotWord WHERE hotWordTechId_=?)',
             parameterValue: techId_)
         .and;
   }
@@ -215,7 +224,8 @@ class HotWord extends TableBase {
 
   // METHODS
   @override
-  Map<String, dynamic> toMap({bool forQuery = false, bool forJson = false, bool forView = false}) {
+  Map<String, dynamic> toMap(
+      {bool forQuery = false, bool forJson = false, bool forView = false}) {
     final map = <String, dynamic>{};
     map['techId_'] = techId_;
     if (name != null || !forView) {
@@ -233,7 +243,9 @@ class HotWord extends TableBase {
 
   @override
   Future<Map<String, dynamic>> toMapWithChildren(
-      [bool forQuery = false, bool forJson = false, bool forView = false]) async {
+      [bool forQuery = false,
+      bool forJson = false,
+      bool forView = false]) async {
     final map = <String, dynamic>{};
     map['techId_'] = techId_;
     if (name != null || !forView) {
@@ -277,12 +289,14 @@ class HotWord extends TableBase {
     return [techId_, name, value, listeningSessionName];
   }
 
-  static Future<List<HotWord>?> fromWebUrl(Uri uri, {Map<String, String>? headers}) async {
+  static Future<List<HotWord>?> fromWebUrl(Uri uri,
+      {Map<String, String>? headers}) async {
     try {
       final response = await http.get(uri, headers: headers);
       return await fromJson(response.body);
     } catch (e) {
-      debugPrint('SQFENTITY ERROR HotWord.fromWebUrl: ErrorMessage: ${e.toString()}');
+      debugPrint(
+          'SQFENTITY ERROR HotWord.fromWebUrl: ErrorMessage: ${e.toString()}');
       return null;
     }
   }
@@ -295,9 +309,12 @@ class HotWord extends TableBase {
     final Iterable list = await json.decode(jsonBody) as Iterable;
     var objList = <HotWord>[];
     try {
-      objList = list.map((hotword) => HotWord.fromMap(hotword as Map<String, dynamic>)).toList();
+      objList = list
+          .map((hotword) => HotWord.fromMap(hotword as Map<String, dynamic>))
+          .toList();
     } catch (e) {
-      debugPrint('SQFENTITY ERROR HotWord.fromJson: ErrorMessage: ${e.toString()}');
+      debugPrint(
+          'SQFENTITY ERROR HotWord.fromJson: ErrorMessage: ${e.toString()}');
     }
     return objList;
   }
@@ -311,17 +328,23 @@ class HotWord extends TableBase {
     final List<HotWord> objList = <HotWord>[];
     loadedFields = loadedFields ?? [];
     for (final map in data) {
-      final obj = HotWord.fromMap(map as Map<String, dynamic>, setDefaultValues: setDefaultValues);
+      final obj = HotWord.fromMap(map as Map<String, dynamic>,
+          setDefaultValues: setDefaultValues);
       // final List<String> _loadedFields = List<String>.from(loadedFields);
 
       // RELATIONSHIPS PRELOAD CHILD
       if (preload) {
         loadedFields = loadedFields ?? [];
-        if (/*!_loadedfields!.contains('hotWord.plListeningSessions') && */ (preloadFields == null ||
+        if (/*!_loadedfields!.contains('hotWord.plListeningSessions') && */ (preloadFields ==
+                null ||
             preloadFields.contains('plListeningSessions'))) {
-          /*_loadedfields!.add('hotWord.plListeningSessions'); */ obj.plListeningSessions = obj.plListeningSessions ??
-              await obj.getListeningSessions()!.toList(
-                  preload: preload, preloadFields: preloadFields, loadParents: false /*, loadedFields:_loadedFields*/);
+          /*_loadedfields!.add('hotWord.plListeningSessions'); */ obj
+                  .plListeningSessions =
+              obj.plListeningSessions ??
+                  await obj.getListeningSessions()!.toList(
+                      preload: preload,
+                      preloadFields: preloadFields,
+                      loadParents: false /*, loadedFields:_loadedFields*/);
         }
       } // END RELATIONSHIPS PRELOAD CHILD
 
@@ -340,7 +363,10 @@ class HotWord extends TableBase {
 
   /// <returns>returns [HotWord] if exist, otherwise returns null
   Future<HotWord?> getById(int? techId_, String? name,
-      {bool preload = false, List<String>? preloadFields, bool loadParents = false, List<String>? loadedFields}) async {
+      {bool preload = false,
+      List<String>? preloadFields,
+      bool loadParents = false,
+      List<String>? loadedFields}) async {
     if (techId_ == null) {
       return null;
     }
@@ -352,11 +378,16 @@ class HotWord extends TableBase {
       // RELATIONSHIPS PRELOAD CHILD
       if (preload) {
         loadedFields = loadedFields ?? [];
-        if (/*!_loadedfields!.contains('hotWord.plListeningSessions') && */ (preloadFields == null ||
+        if (/*!_loadedfields!.contains('hotWord.plListeningSessions') && */ (preloadFields ==
+                null ||
             preloadFields.contains('plListeningSessions'))) {
-          /*_loadedfields!.add('hotWord.plListeningSessions'); */ obj.plListeningSessions = obj.plListeningSessions ??
-              await obj.getListeningSessions()!.toList(
-                  preload: preload, preloadFields: preloadFields, loadParents: false /*, loadedFields:_loadedFields*/);
+          /*_loadedfields!.add('hotWord.plListeningSessions'); */ obj
+                  .plListeningSessions =
+              obj.plListeningSessions ??
+                  await obj.getListeningSessions()!.toList(
+                      preload: preload,
+                      preloadFields: preloadFields,
+                      loadParents: false /*, loadedFields:_loadedFields*/);
         }
       } // END RELATIONSHIPS PRELOAD CHILD
     } else {
@@ -398,7 +429,10 @@ class HotWord extends TableBase {
       await obj.save();
     }
     if (!isStartedBatch) {
-      result = await DbModel().batchCommit(exclusive: exclusive, noResult: noResult, continueOnError: continueOnError);
+      result = await DbModel().batchCommit(
+          exclusive: exclusive,
+          noResult: noResult,
+          continueOnError: continueOnError);
     }
     return result!;
   }
@@ -413,13 +447,19 @@ class HotWord extends TableBase {
           [techId_, name, value, listeningSessionName],
           ignoreBatch);
       if (result! > 0) {
-        saveResult = BoolResult(success: true, successMessage: 'HotWord techId_=$techId_ updated successfully');
+        saveResult = BoolResult(
+            success: true,
+            successMessage: 'HotWord techId_=$techId_ updated successfully');
       } else {
-        saveResult = BoolResult(success: false, errorMessage: 'HotWord techId_=$techId_ did not update');
+        saveResult = BoolResult(
+            success: false,
+            errorMessage: 'HotWord techId_=$techId_ did not update');
       }
       return techId_;
     } catch (e) {
-      saveResult = BoolResult(success: false, errorMessage: 'HotWord Save failed. Error: ${e.toString()}');
+      saveResult = BoolResult(
+          success: false,
+          errorMessage: 'HotWord Save failed. Error: ${e.toString()}');
       return null;
     }
   }
@@ -431,8 +471,11 @@ class HotWord extends TableBase {
   Future<BoolCommitResult> upsertAll(List<HotWord> hotwords,
       {bool? exclusive, bool? noResult, bool? continueOnError}) async {
     final results = await _mnHotWord.rawInsertAll(
-        'INSERT OR REPLACE INTO hotWord (techId_, name, value, listeningSessionName)  VALUES (?,?,?,?)', hotwords,
-        exclusive: exclusive, noResult: noResult, continueOnError: continueOnError);
+        'INSERT OR REPLACE INTO hotWord (techId_, name, value, listeningSessionName)  VALUES (?,?,?,?)',
+        hotwords,
+        exclusive: exclusive,
+        noResult: noResult,
+        continueOnError: continueOnError);
     return results;
   }
 
@@ -443,27 +486,36 @@ class HotWord extends TableBase {
   Future<BoolResult> delete([bool hardDelete = false]) async {
     debugPrint('SQFENTITIY: delete HotWord invoked (techId_=$techId_)');
     if (!_softDeleteActivated || hardDelete) {
-      return _mnHotWord.delete(QueryParams(whereString: 'techId_=? AND name=?', whereArguments: [techId_, name]));
+      return _mnHotWord.delete(QueryParams(
+          whereString: 'techId_=? AND name=?',
+          whereArguments: [techId_, name]));
     } else {
       return _mnHotWord.updateBatch(
-          QueryParams(whereString: 'techId_=? AND name=?', whereArguments: [techId_, name]), {'isDeleted': 1});
+          QueryParams(
+              whereString: 'techId_=? AND name=?',
+              whereArguments: [techId_, name]),
+          {'isDeleted': 1});
     }
   }
 
   @override
   Future<BoolResult> recover([bool recoverChilds = true]) {
     // not implemented because:
-    final msg = 'set useSoftDeleting:true in the table definition of [HotWord] to use this feature';
+    final msg =
+        'set useSoftDeleting:true in the table definition of [HotWord] to use this feature';
     throw UnimplementedError(msg);
   }
 
   @override
-  HotWordFilterBuilder select({List<String>? columnsToSelect, bool? getIsDeleted}) {
-    return HotWordFilterBuilder(this, getIsDeleted)..qparams.selectColumns = columnsToSelect;
+  HotWordFilterBuilder select(
+      {List<String>? columnsToSelect, bool? getIsDeleted}) {
+    return HotWordFilterBuilder(this, getIsDeleted)
+      ..qparams.selectColumns = columnsToSelect;
   }
 
   @override
-  HotWordFilterBuilder distinct({List<String>? columnsToSelect, bool? getIsDeleted}) {
+  HotWordFilterBuilder distinct(
+      {List<String>? columnsToSelect, bool? getIsDeleted}) {
     return HotWordFilterBuilder(this, getIsDeleted)
       ..qparams.selectColumns = columnsToSelect
       ..qparams.distinct = true;
@@ -577,7 +629,8 @@ class HotWordField extends FilterBase {
 
 // region HotWordFilterBuilder
 class HotWordFilterBuilder extends ConjunctionBase {
-  HotWordFilterBuilder(HotWord obj, bool? getIsDeleted) : super(obj, getIsDeleted) {
+  HotWordFilterBuilder(HotWord obj, bool? getIsDeleted)
+      : super(obj, getIsDeleted) {
     _mnHotWord = obj._mnHotWord;
     _softDeleteActivated = obj.softDeleteActivated;
   }
@@ -672,7 +725,9 @@ class HotWordFilterBuilder extends ConjunctionBase {
   }
 
   HotWordField _setField(HotWordField? field, String colName, DbType dbtype) {
-    return HotWordField(this)..param = DbParameter(dbType: dbtype, columnName: colName, wStartBlock: openedBlock);
+    return HotWordField(this)
+      ..param = DbParameter(
+          dbType: dbtype, columnName: colName, wStartBlock: openedBlock);
   }
 
   HotWordField? _techId_;
@@ -692,7 +747,8 @@ class HotWordFilterBuilder extends ConjunctionBase {
 
   HotWordField? _listeningSessionName;
   HotWordField get listeningSessionName {
-    return _listeningSessionName = _setField(_listeningSessionName, 'listeningSessionName', DbType.text);
+    return _listeningSessionName =
+        _setField(_listeningSessionName, 'listeningSessionName', DbType.text);
   }
 
   /// Deletes List<HotWord> bulk by query
@@ -734,7 +790,10 @@ class HotWordFilterBuilder extends ConjunctionBase {
   /// <returns> HotWord?
   @override
   Future<HotWord?> toSingle(
-      {bool preload = false, List<String>? preloadFields, bool loadParents = false, List<String>? loadedFields}) async {
+      {bool preload = false,
+      List<String>? preloadFields,
+      bool loadParents = false,
+      List<String>? loadedFields}) async {
     buildParameters(pSize: 1);
     final objFuture = _mnHotWord!.toList(qparams);
     final data = await objFuture;
@@ -745,11 +804,16 @@ class HotWordFilterBuilder extends ConjunctionBase {
       // RELATIONSHIPS PRELOAD CHILD
       if (preload) {
         loadedFields = loadedFields ?? [];
-        if (/*!_loadedfields!.contains('hotWord.plListeningSessions') && */ (preloadFields == null ||
+        if (/*!_loadedfields!.contains('hotWord.plListeningSessions') && */ (preloadFields ==
+                null ||
             preloadFields.contains('plListeningSessions'))) {
-          /*_loadedfields!.add('hotWord.plListeningSessions'); */ obj.plListeningSessions = obj.plListeningSessions ??
-              await obj.getListeningSessions()!.toList(
-                  preload: preload, preloadFields: preloadFields, loadParents: false /*, loadedFields:_loadedFields*/);
+          /*_loadedfields!.add('hotWord.plListeningSessions'); */ obj
+                  .plListeningSessions =
+              obj.plListeningSessions ??
+                  await obj.getListeningSessions()!.toList(
+                      preload: preload,
+                      preloadFields: preloadFields,
+                      loadParents: false /*, loadedFields:_loadedFields*/);
         }
       } // END RELATIONSHIPS PRELOAD CHILD
     } else {
@@ -768,9 +832,15 @@ class HotWordFilterBuilder extends ConjunctionBase {
   /// <returns> HotWord?
   @override
   Future<HotWord> toSingleOrDefault(
-      {bool preload = false, List<String>? preloadFields, bool loadParents = false, List<String>? loadedFields}) async {
+      {bool preload = false,
+      List<String>? preloadFields,
+      bool loadParents = false,
+      List<String>? loadedFields}) async {
     return await toSingle(
-            preload: preload, preloadFields: preloadFields, loadParents: loadParents, loadedFields: loadedFields) ??
+            preload: preload,
+            preloadFields: preloadFields,
+            loadParents: loadParents,
+            loadedFields: loadedFields) ??
         HotWord();
   }
 
@@ -798,7 +868,10 @@ class HotWordFilterBuilder extends ConjunctionBase {
   /// <returns>List<HotWord>
   @override
   Future<List<HotWord>> toList(
-      {bool preload = false, List<String>? preloadFields, bool loadParents = false, List<String>? loadedFields}) async {
+      {bool preload = false,
+      List<String>? preloadFields,
+      bool loadParents = false,
+      List<String>? loadedFields}) async {
     final data = await toMapList();
     final List<HotWord> hotwordsData = await HotWord.fromMapList(data,
         preload: preload,
@@ -848,7 +921,8 @@ class HotWordFilterBuilder extends ConjunctionBase {
     if (buildParams) {
       buildParameters();
     }
-    _retVal['sql'] = 'SELECT `techId_`name` FROM hotWord WHERE ${qparams.whereString}';
+    _retVal['sql'] =
+        'SELECT `techId_`name` FROM hotWord WHERE ${qparams.whereString}';
     _retVal['args'] = qparams.whereArguments;
     return _retVal;
   }
@@ -885,7 +959,8 @@ class HotWordFilterBuilder extends ConjunctionBase {
   /// Returns List<String> for selected first column
   /// Sample usage: await HotWord.select(columnsToSelect: ['columnName']).toListString()
   @override
-  Future<List<String>> toListString([VoidCallback Function(List<String> o)? listString]) async {
+  Future<List<String>> toListString(
+      [VoidCallback Function(List<String> o)? listString]) async {
     buildParameters();
 
     final objectFuture = _mnHotWord!.toList(qparams);
@@ -908,7 +983,8 @@ class HotWordFilterBuilder extends ConjunctionBase {
 class HotWordFields {
   static TableField? _fTechId_;
   static TableField get techId_ {
-    return _fTechId_ = _fTechId_ ?? SqlSyntax.setField(_fTechId_, 'techid_', DbType.integer);
+    return _fTechId_ =
+        _fTechId_ ?? SqlSyntax.setField(_fTechId_, 'techid_', DbType.integer);
   }
 
   static TableField? _fName;
@@ -918,20 +994,26 @@ class HotWordFields {
 
   static TableField? _fValue;
   static TableField get value {
-    return _fValue = _fValue ?? SqlSyntax.setField(_fValue, 'value', DbType.text);
+    return _fValue =
+        _fValue ?? SqlSyntax.setField(_fValue, 'value', DbType.text);
   }
 
   static TableField? _fListeningSessionName;
   static TableField get listeningSessionName {
-    return _fListeningSessionName =
-        _fListeningSessionName ?? SqlSyntax.setField(_fListeningSessionName, 'listeningSessionName', DbType.text);
+    return _fListeningSessionName = _fListeningSessionName ??
+        SqlSyntax.setField(
+            _fListeningSessionName, 'listeningSessionName', DbType.text);
   }
 }
 // endregion HotWordFields
 
 //region HotWordManager
 class HotWordManager extends SqfEntityProvider {
-  HotWordManager() : super(DbModel(), tableName: _tableName, primaryKeyList: _primaryKeyList, whereStr: _whereStr);
+  HotWordManager()
+      : super(DbModel(),
+            tableName: _tableName,
+            primaryKeyList: _primaryKeyList,
+            whereStr: _whereStr);
   static const String _tableName = 'hotWord';
   static const List<String> _primaryKeyList = ['techId_', 'name'];
   static const String _whereStr = 'techId_=? AND name=?';
@@ -940,20 +1022,28 @@ class HotWordManager extends SqfEntityProvider {
 //endregion HotWordManager
 // region ListeningSession
 class ListeningSession extends TableBase {
-  ListeningSession({this.techId_, this.name, this.label, this.duration, this.isActive, this.rownum, this.hotWordName}) {
+  ListeningSession(
+      {this.techId_,
+      this.name,
+      this.label,
+      this.duration,
+      this.isActive,
+      this.rownum,
+      this.hotWordName}) {
     _setDefaultValues();
     softDeleteActivated = false;
   }
-  ListeningSession.withFields(
-      this.techId_, this.name, this.label, this.duration, this.isActive, this.rownum, this.hotWordName) {
+  ListeningSession.withFields(this.techId_, this.name, this.label,
+      this.duration, this.isActive, this.rownum, this.hotWordName) {
     _setDefaultValues();
   }
-  ListeningSession.withId(
-      this.techId_, this.name, this.label, this.duration, this.isActive, this.rownum, this.hotWordName) {
+  ListeningSession.withId(this.techId_, this.name, this.label, this.duration,
+      this.isActive, this.rownum, this.hotWordName) {
     _setDefaultValues();
   }
   // fromMap v2.0
-  ListeningSession.fromMap(Map<String, dynamic> o, {bool setDefaultValues = true}) {
+  ListeningSession.fromMap(Map<String, dynamic> o,
+      {bool setDefaultValues = true}) {
     if (setDefaultValues) {
       _setDefaultValues();
     }
@@ -968,7 +1058,8 @@ class ListeningSession extends TableBase {
       duration = int.tryParse(o['duration'].toString());
     }
     if (o['isActive'] != null) {
-      isActive = o['isActive'].toString() == '1' || o['isActive'].toString() == 'true';
+      isActive =
+          o['isActive'].toString() == '1' || o['isActive'].toString() == 'true';
     }
     if (o['rownum'] != null) {
       rownum = int.tryParse(o['rownum'].toString());
@@ -996,10 +1087,12 @@ class ListeningSession extends TableBase {
   List<HotWord>? plHotWords;
 
   /// get HotWord(s) filtered by hotWordTechId_ IN listeningSessionHotWord
-  HotWordFilterBuilder? getHotWords({List<String>? columnsToSelect, bool? getIsDeleted}) {
+  HotWordFilterBuilder? getHotWords(
+      {List<String>? columnsToSelect, bool? getIsDeleted}) {
     return HotWord()
         .select(columnsToSelect: columnsToSelect, getIsDeleted: getIsDeleted)
-        .where('techId_ IN (SELECT hotWordTechId_ FROM listeningSessionHotWord WHERE listeningSessionTechId_=?)',
+        .where(
+            'techId_ IN (SELECT hotWordTechId_ FROM listeningSessionHotWord WHERE listeningSessionTechId_=?)',
             parameterValue: techId_)
         .and;
   }
@@ -1010,12 +1103,14 @@ class ListeningSession extends TableBase {
   ListeningSessionManager? __mnListeningSession;
 
   ListeningSessionManager get _mnListeningSession {
-    return __mnListeningSession = __mnListeningSession ?? ListeningSessionManager();
+    return __mnListeningSession =
+        __mnListeningSession ?? ListeningSessionManager();
   }
 
   // METHODS
   @override
-  Map<String, dynamic> toMap({bool forQuery = false, bool forJson = false, bool forView = false}) {
+  Map<String, dynamic> toMap(
+      {bool forQuery = false, bool forJson = false, bool forView = false}) {
     final map = <String, dynamic>{};
     map['techId_'] = techId_;
     if (name != null || !forView) {
@@ -1044,7 +1139,9 @@ class ListeningSession extends TableBase {
 
   @override
   Future<Map<String, dynamic>> toMapWithChildren(
-      [bool forQuery = false, bool forJson = false, bool forView = false]) async {
+      [bool forQuery = false,
+      bool forJson = false,
+      bool forView = false]) async {
     final map = <String, dynamic>{};
     map['techId_'] = techId_;
     if (name != null || !forView) {
@@ -1099,12 +1196,14 @@ class ListeningSession extends TableBase {
     return [techId_, name, label, duration, isActive, rownum, hotWordName];
   }
 
-  static Future<List<ListeningSession>?> fromWebUrl(Uri uri, {Map<String, String>? headers}) async {
+  static Future<List<ListeningSession>?> fromWebUrl(Uri uri,
+      {Map<String, String>? headers}) async {
     try {
       final response = await http.get(uri, headers: headers);
       return await fromJson(response.body);
     } catch (e) {
-      debugPrint('SQFENTITY ERROR ListeningSession.fromWebUrl: ErrorMessage: ${e.toString()}');
+      debugPrint(
+          'SQFENTITY ERROR ListeningSession.fromWebUrl: ErrorMessage: ${e.toString()}');
       return null;
     }
   }
@@ -1117,10 +1216,13 @@ class ListeningSession extends TableBase {
     final Iterable list = await json.decode(jsonBody) as Iterable;
     var objList = <ListeningSession>[];
     try {
-      objList =
-          list.map((listeningsession) => ListeningSession.fromMap(listeningsession as Map<String, dynamic>)).toList();
+      objList = list
+          .map((listeningsession) => ListeningSession.fromMap(
+              listeningsession as Map<String, dynamic>))
+          .toList();
     } catch (e) {
-      debugPrint('SQFENTITY ERROR ListeningSession.fromJson: ErrorMessage: ${e.toString()}');
+      debugPrint(
+          'SQFENTITY ERROR ListeningSession.fromJson: ErrorMessage: ${e.toString()}');
     }
     return objList;
   }
@@ -1134,17 +1236,23 @@ class ListeningSession extends TableBase {
     final List<ListeningSession> objList = <ListeningSession>[];
     loadedFields = loadedFields ?? [];
     for (final map in data) {
-      final obj = ListeningSession.fromMap(map as Map<String, dynamic>, setDefaultValues: setDefaultValues);
+      final obj = ListeningSession.fromMap(map as Map<String, dynamic>,
+          setDefaultValues: setDefaultValues);
       // final List<String> _loadedFields = List<String>.from(loadedFields);
 
       // RELATIONSHIPS PRELOAD CHILD
       if (preload) {
         loadedFields = loadedFields ?? [];
-        if (/*!_loadedfields!.contains('listeningSession.plHotWords') && */ (preloadFields == null ||
+        if (/*!_loadedfields!.contains('listeningSession.plHotWords') && */ (preloadFields ==
+                null ||
             preloadFields.contains('plHotWords'))) {
-          /*_loadedfields!.add('listeningSession.plHotWords'); */ obj.plHotWords = obj.plHotWords ??
-              await obj.getHotWords()!.toList(
-                  preload: preload, preloadFields: preloadFields, loadParents: false /*, loadedFields:_loadedFields*/);
+          /*_loadedfields!.add('listeningSession.plHotWords'); */ obj
+                  .plHotWords =
+              obj.plHotWords ??
+                  await obj.getHotWords()!.toList(
+                      preload: preload,
+                      preloadFields: preloadFields,
+                      loadParents: false /*, loadedFields:_loadedFields*/);
         }
       } // END RELATIONSHIPS PRELOAD CHILD
 
@@ -1163,7 +1271,10 @@ class ListeningSession extends TableBase {
 
   /// <returns>returns [ListeningSession] if exist, otherwise returns null
   Future<ListeningSession?> getById(int? techId_, String? name,
-      {bool preload = false, List<String>? preloadFields, bool loadParents = false, List<String>? loadedFields}) async {
+      {bool preload = false,
+      List<String>? preloadFields,
+      bool loadParents = false,
+      List<String>? loadedFields}) async {
     if (techId_ == null) {
       return null;
     }
@@ -1175,11 +1286,16 @@ class ListeningSession extends TableBase {
       // RELATIONSHIPS PRELOAD CHILD
       if (preload) {
         loadedFields = loadedFields ?? [];
-        if (/*!_loadedfields!.contains('listeningSession.plHotWords') && */ (preloadFields == null ||
+        if (/*!_loadedfields!.contains('listeningSession.plHotWords') && */ (preloadFields ==
+                null ||
             preloadFields.contains('plHotWords'))) {
-          /*_loadedfields!.add('listeningSession.plHotWords'); */ obj.plHotWords = obj.plHotWords ??
-              await obj.getHotWords()!.toList(
-                  preload: preload, preloadFields: preloadFields, loadParents: false /*, loadedFields:_loadedFields*/);
+          /*_loadedfields!.add('listeningSession.plHotWords'); */ obj
+                  .plHotWords =
+              obj.plHotWords ??
+                  await obj.getHotWords()!.toList(
+                      preload: preload,
+                      preloadFields: preloadFields,
+                      loadParents: false /*, loadedFields:_loadedFields*/);
         }
       } // END RELATIONSHIPS PRELOAD CHILD
     } else {
@@ -1221,7 +1337,10 @@ class ListeningSession extends TableBase {
       await obj.save();
     }
     if (!isStartedBatch) {
-      result = await DbModel().batchCommit(exclusive: exclusive, noResult: noResult, continueOnError: continueOnError);
+      result = await DbModel().batchCommit(
+          exclusive: exclusive,
+          noResult: noResult,
+          continueOnError: continueOnError);
     }
     return result!;
   }
@@ -1236,14 +1355,20 @@ class ListeningSession extends TableBase {
           [techId_, name, label, duration, isActive, rownum, hotWordName],
           ignoreBatch);
       if (result! > 0) {
-        saveResult =
-            BoolResult(success: true, successMessage: 'ListeningSession techId_=$techId_ updated successfully');
+        saveResult = BoolResult(
+            success: true,
+            successMessage:
+                'ListeningSession techId_=$techId_ updated successfully');
       } else {
-        saveResult = BoolResult(success: false, errorMessage: 'ListeningSession techId_=$techId_ did not update');
+        saveResult = BoolResult(
+            success: false,
+            errorMessage: 'ListeningSession techId_=$techId_ did not update');
       }
       return techId_;
     } catch (e) {
-      saveResult = BoolResult(success: false, errorMessage: 'ListeningSession Save failed. Error: ${e.toString()}');
+      saveResult = BoolResult(
+          success: false,
+          errorMessage: 'ListeningSession Save failed. Error: ${e.toString()}');
       return null;
     }
   }
@@ -1268,30 +1393,39 @@ class ListeningSession extends TableBase {
   /// <returns>BoolResult res.success= true (Deleted), false (Could not be deleted)
   @override
   Future<BoolResult> delete([bool hardDelete = false]) async {
-    debugPrint('SQFENTITIY: delete ListeningSession invoked (techId_=$techId_)');
+    debugPrint(
+        'SQFENTITIY: delete ListeningSession invoked (techId_=$techId_)');
     if (!_softDeleteActivated || hardDelete) {
-      return _mnListeningSession
-          .delete(QueryParams(whereString: 'techId_=? AND name=?', whereArguments: [techId_, name]));
+      return _mnListeningSession.delete(QueryParams(
+          whereString: 'techId_=? AND name=?',
+          whereArguments: [techId_, name]));
     } else {
       return _mnListeningSession.updateBatch(
-          QueryParams(whereString: 'techId_=? AND name=?', whereArguments: [techId_, name]), {'isDeleted': 1});
+          QueryParams(
+              whereString: 'techId_=? AND name=?',
+              whereArguments: [techId_, name]),
+          {'isDeleted': 1});
     }
   }
 
   @override
   Future<BoolResult> recover([bool recoverChilds = true]) {
     // not implemented because:
-    final msg = 'set useSoftDeleting:true in the table definition of [ListeningSession] to use this feature';
+    final msg =
+        'set useSoftDeleting:true in the table definition of [ListeningSession] to use this feature';
     throw UnimplementedError(msg);
   }
 
   @override
-  ListeningSessionFilterBuilder select({List<String>? columnsToSelect, bool? getIsDeleted}) {
-    return ListeningSessionFilterBuilder(this, getIsDeleted)..qparams.selectColumns = columnsToSelect;
+  ListeningSessionFilterBuilder select(
+      {List<String>? columnsToSelect, bool? getIsDeleted}) {
+    return ListeningSessionFilterBuilder(this, getIsDeleted)
+      ..qparams.selectColumns = columnsToSelect;
   }
 
   @override
-  ListeningSessionFilterBuilder distinct({List<String>? columnsToSelect, bool? getIsDeleted}) {
+  ListeningSessionFilterBuilder distinct(
+      {List<String>? columnsToSelect, bool? getIsDeleted}) {
     return ListeningSessionFilterBuilder(this, getIsDeleted)
       ..qparams.selectColumns = columnsToSelect
       ..qparams.distinct = true;
@@ -1334,7 +1468,8 @@ class ListeningSession extends TableBase {
 
 // region ListeningSessionField
 class ListeningSessionField extends FilterBase {
-  ListeningSessionField(ListeningSessionFilterBuilder listeningsessionFB) : super(listeningsessionFB);
+  ListeningSessionField(ListeningSessionFilterBuilder listeningsessionFB)
+      : super(listeningsessionFB);
 
   @override
   ListeningSessionFilterBuilder equals(dynamic pValue) {
@@ -1405,7 +1540,8 @@ class ListeningSessionField extends FilterBase {
 
 // region ListeningSessionFilterBuilder
 class ListeningSessionFilterBuilder extends ConjunctionBase {
-  ListeningSessionFilterBuilder(ListeningSession obj, bool? getIsDeleted) : super(obj, getIsDeleted) {
+  ListeningSessionFilterBuilder(ListeningSession obj, bool? getIsDeleted)
+      : super(obj, getIsDeleted) {
     _mnListeningSession = obj._mnListeningSession;
     _softDeleteActivated = obj.softDeleteActivated;
   }
@@ -1436,7 +1572,8 @@ class ListeningSessionFilterBuilder extends ConjunctionBase {
 
   /// String whereCriteria, write raw query without 'where' keyword. Like this: 'field1 like 'test%' and field2 = 3'
   @override
-  ListeningSessionFilterBuilder where(String? whereCriteria, {dynamic parameterValue}) {
+  ListeningSessionFilterBuilder where(String? whereCriteria,
+      {dynamic parameterValue}) {
     super.where(whereCriteria, parameterValue: parameterValue);
     return this;
   }
@@ -1499,9 +1636,11 @@ class ListeningSessionFilterBuilder extends ConjunctionBase {
     return this;
   }
 
-  ListeningSessionField _setField(ListeningSessionField? field, String colName, DbType dbtype) {
+  ListeningSessionField _setField(
+      ListeningSessionField? field, String colName, DbType dbtype) {
     return ListeningSessionField(this)
-      ..param = DbParameter(dbType: dbtype, columnName: colName, wStartBlock: openedBlock);
+      ..param = DbParameter(
+          dbType: dbtype, columnName: colName, wStartBlock: openedBlock);
   }
 
   ListeningSessionField? _techId_;
@@ -1578,7 +1717,10 @@ class ListeningSessionFilterBuilder extends ConjunctionBase {
   /// <returns> ListeningSession?
   @override
   Future<ListeningSession?> toSingle(
-      {bool preload = false, List<String>? preloadFields, bool loadParents = false, List<String>? loadedFields}) async {
+      {bool preload = false,
+      List<String>? preloadFields,
+      bool loadParents = false,
+      List<String>? loadedFields}) async {
     buildParameters(pSize: 1);
     final objFuture = _mnListeningSession!.toList(qparams);
     final data = await objFuture;
@@ -1589,11 +1731,16 @@ class ListeningSessionFilterBuilder extends ConjunctionBase {
       // RELATIONSHIPS PRELOAD CHILD
       if (preload) {
         loadedFields = loadedFields ?? [];
-        if (/*!_loadedfields!.contains('listeningSession.plHotWords') && */ (preloadFields == null ||
+        if (/*!_loadedfields!.contains('listeningSession.plHotWords') && */ (preloadFields ==
+                null ||
             preloadFields.contains('plHotWords'))) {
-          /*_loadedfields!.add('listeningSession.plHotWords'); */ obj.plHotWords = obj.plHotWords ??
-              await obj.getHotWords()!.toList(
-                  preload: preload, preloadFields: preloadFields, loadParents: false /*, loadedFields:_loadedFields*/);
+          /*_loadedfields!.add('listeningSession.plHotWords'); */ obj
+                  .plHotWords =
+              obj.plHotWords ??
+                  await obj.getHotWords()!.toList(
+                      preload: preload,
+                      preloadFields: preloadFields,
+                      loadParents: false /*, loadedFields:_loadedFields*/);
         }
       } // END RELATIONSHIPS PRELOAD CHILD
     } else {
@@ -1612,16 +1759,23 @@ class ListeningSessionFilterBuilder extends ConjunctionBase {
   /// <returns> ListeningSession?
   @override
   Future<ListeningSession> toSingleOrDefault(
-      {bool preload = false, List<String>? preloadFields, bool loadParents = false, List<String>? loadedFields}) async {
+      {bool preload = false,
+      List<String>? preloadFields,
+      bool loadParents = false,
+      List<String>? loadedFields}) async {
     return await toSingle(
-            preload: preload, preloadFields: preloadFields, loadParents: loadParents, loadedFields: loadedFields) ??
+            preload: preload,
+            preloadFields: preloadFields,
+            loadParents: loadParents,
+            loadedFields: loadedFields) ??
         ListeningSession();
   }
 
   /// This method returns int. [ListeningSession]
   /// <returns>int
   @override
-  Future<int> toCount([VoidCallback Function(int c)? listeningsessionCount]) async {
+  Future<int> toCount(
+      [VoidCallback Function(int c)? listeningsessionCount]) async {
     buildParameters();
     qparams.selectColumns = ['COUNT(1) AS CNT'];
     final listeningsessionsFuture = await _mnListeningSession!.toList(qparams);
@@ -1642,14 +1796,18 @@ class ListeningSessionFilterBuilder extends ConjunctionBase {
   /// <returns>List<ListeningSession>
   @override
   Future<List<ListeningSession>> toList(
-      {bool preload = false, List<String>? preloadFields, bool loadParents = false, List<String>? loadedFields}) async {
+      {bool preload = false,
+      List<String>? preloadFields,
+      bool loadParents = false,
+      List<String>? loadedFields}) async {
     final data = await toMapList();
-    final List<ListeningSession> listeningsessionsData = await ListeningSession.fromMapList(data,
-        preload: preload,
-        preloadFields: preloadFields,
-        loadParents: loadParents,
-        loadedFields: loadedFields,
-        setDefaultValues: qparams.selectColumns == null);
+    final List<ListeningSession> listeningsessionsData =
+        await ListeningSession.fromMapList(data,
+            preload: preload,
+            preloadFields: preloadFields,
+            loadParents: loadParents,
+            loadedFields: loadedFields,
+            setDefaultValues: qparams.selectColumns == null);
     return listeningsessionsData;
   }
 
@@ -1692,7 +1850,8 @@ class ListeningSessionFilterBuilder extends ConjunctionBase {
     if (buildParams) {
       buildParameters();
     }
-    _retVal['sql'] = 'SELECT `techId_`name` FROM listeningSession WHERE ${qparams.whereString}';
+    _retVal['sql'] =
+        'SELECT `techId_`name` FROM listeningSession WHERE ${qparams.whereString}';
     _retVal['args'] = qparams.whereArguments;
     return _retVal;
   }
@@ -1700,7 +1859,8 @@ class ListeningSessionFilterBuilder extends ConjunctionBase {
   /// This method returns Primary Key List<techId_,name> [ListeningSession]
   /// <returns>List<techId_,name>
   @override
-  Future<List<ListeningSession>> toListPrimaryKey([bool buildParams = true]) async {
+  Future<List<ListeningSession>> toListPrimaryKey(
+      [bool buildParams = true]) async {
     if (buildParams) {
       buildParameters();
     }
@@ -1729,7 +1889,8 @@ class ListeningSessionFilterBuilder extends ConjunctionBase {
   /// Returns List<String> for selected first column
   /// Sample usage: await ListeningSession.select(columnsToSelect: ['columnName']).toListString()
   @override
-  Future<List<String>> toListString([VoidCallback Function(List<String> o)? listString]) async {
+  Future<List<String>> toListString(
+      [VoidCallback Function(List<String> o)? listString]) async {
     buildParameters();
 
     final objectFuture = _mnListeningSession!.toList(qparams);
@@ -1752,7 +1913,8 @@ class ListeningSessionFilterBuilder extends ConjunctionBase {
 class ListeningSessionFields {
   static TableField? _fTechId_;
   static TableField get techId_ {
-    return _fTechId_ = _fTechId_ ?? SqlSyntax.setField(_fTechId_, 'techid_', DbType.integer);
+    return _fTechId_ =
+        _fTechId_ ?? SqlSyntax.setField(_fTechId_, 'techid_', DbType.integer);
   }
 
   static TableField? _fName;
@@ -1762,27 +1924,32 @@ class ListeningSessionFields {
 
   static TableField? _fLabel;
   static TableField get label {
-    return _fLabel = _fLabel ?? SqlSyntax.setField(_fLabel, 'label', DbType.text);
+    return _fLabel =
+        _fLabel ?? SqlSyntax.setField(_fLabel, 'label', DbType.text);
   }
 
   static TableField? _fDuration;
   static TableField get duration {
-    return _fDuration = _fDuration ?? SqlSyntax.setField(_fDuration, 'duration', DbType.numeric);
+    return _fDuration = _fDuration ??
+        SqlSyntax.setField(_fDuration, 'duration', DbType.numeric);
   }
 
   static TableField? _fIsActive;
   static TableField get isActive {
-    return _fIsActive = _fIsActive ?? SqlSyntax.setField(_fIsActive, 'isActive', DbType.bool);
+    return _fIsActive =
+        _fIsActive ?? SqlSyntax.setField(_fIsActive, 'isActive', DbType.bool);
   }
 
   static TableField? _fRownum;
   static TableField get rownum {
-    return _fRownum = _fRownum ?? SqlSyntax.setField(_fRownum, 'rownum', DbType.integer);
+    return _fRownum =
+        _fRownum ?? SqlSyntax.setField(_fRownum, 'rownum', DbType.integer);
   }
 
   static TableField? _fHotWordName;
   static TableField get hotWordName {
-    return _fHotWordName = _fHotWordName ?? SqlSyntax.setField(_fHotWordName, 'hotWordName', DbType.text);
+    return _fHotWordName = _fHotWordName ??
+        SqlSyntax.setField(_fHotWordName, 'hotWordName', DbType.text);
   }
 }
 // endregion ListeningSessionFields
@@ -1790,7 +1957,10 @@ class ListeningSessionFields {
 //region ListeningSessionManager
 class ListeningSessionManager extends SqfEntityProvider {
   ListeningSessionManager()
-      : super(DbModel(), tableName: _tableName, primaryKeyList: _primaryKeyList, whereStr: _whereStr);
+      : super(DbModel(),
+            tableName: _tableName,
+            primaryKeyList: _primaryKeyList,
+            whereStr: _whereStr);
   static const String _tableName = 'listeningSession';
   static const List<String> _primaryKeyList = ['techId_', 'name'];
   static const String _whereStr = 'techId_=? AND name=?';
@@ -1800,24 +1970,29 @@ class ListeningSessionManager extends SqfEntityProvider {
 // region ListeningSessionHotWord
 class ListeningSessionHotWord extends TableBase {
   ListeningSessionHotWord(
-      {this.listeningSessionTechId_, this.hotWordTechId_, this.listeningSessionName, this.hotWordName}) {
+      {this.listeningSessionTechId_,
+      this.hotWordTechId_,
+      this.listeningSessionName,
+      this.hotWordName}) {
     _setDefaultValues();
     softDeleteActivated = false;
   }
-  ListeningSessionHotWord.withFields(
-      this.listeningSessionTechId_, this.hotWordTechId_, this.listeningSessionName, this.hotWordName) {
+  ListeningSessionHotWord.withFields(this.listeningSessionTechId_,
+      this.hotWordTechId_, this.listeningSessionName, this.hotWordName) {
     _setDefaultValues();
   }
-  ListeningSessionHotWord.withId(
-      this.listeningSessionTechId_, this.hotWordTechId_, this.listeningSessionName, this.hotWordName) {
+  ListeningSessionHotWord.withId(this.listeningSessionTechId_,
+      this.hotWordTechId_, this.listeningSessionName, this.hotWordName) {
     _setDefaultValues();
   }
   // fromMap v2.0
-  ListeningSessionHotWord.fromMap(Map<String, dynamic> o, {bool setDefaultValues = true}) {
+  ListeningSessionHotWord.fromMap(Map<String, dynamic> o,
+      {bool setDefaultValues = true}) {
     if (setDefaultValues) {
       _setDefaultValues();
     }
-    listeningSessionTechId_ = int.tryParse(o['listeningSessionTechId_'].toString());
+    listeningSessionTechId_ =
+        int.tryParse(o['listeningSessionTechId_'].toString());
 
     hotWordTechId_ = int.tryParse(o['hotWordTechId_'].toString());
 
@@ -1829,9 +2004,13 @@ class ListeningSessionHotWord extends TableBase {
     }
 
     // RELATIONSHIPS FromMAP
-    plListeningSession =
-        o['listeningSession'] != null ? ListeningSession.fromMap(o['listeningSession'] as Map<String, dynamic>) : null;
-    plHotWord = o['hotWord'] != null ? HotWord.fromMap(o['hotWord'] as Map<String, dynamic>) : null;
+    plListeningSession = o['listeningSession'] != null
+        ? ListeningSession.fromMap(
+            o['listeningSession'] as Map<String, dynamic>)
+        : null;
+    plHotWord = o['hotWord'] != null
+        ? HotWord.fromMap(o['hotWord'] as Map<String, dynamic>)
+        : null;
     // END RELATIONSHIPS FromMAP
 
     isSaved = true;
@@ -1850,9 +2029,11 @@ class ListeningSessionHotWord extends TableBase {
   ListeningSession? plListeningSession;
 
   /// get ListeningSession By ListeningSessionTechId_
-  Future<ListeningSession?> getListeningSession({bool loadParents = false, List<String>? loadedFields}) async {
-    final _obj = await ListeningSession()
-        .getById(listeningSessionTechId_, listeningSessionName, loadParents: loadParents, loadedFields: loadedFields);
+  Future<ListeningSession?> getListeningSession(
+      {bool loadParents = false, List<String>? loadedFields}) async {
+    final _obj = await ListeningSession().getById(
+        listeningSessionTechId_, listeningSessionName,
+        loadParents: loadParents, loadedFields: loadedFields);
     return _obj;
   }
 
@@ -1861,9 +2042,10 @@ class ListeningSessionHotWord extends TableBase {
   HotWord? plHotWord;
 
   /// get HotWord By HotWordTechId_
-  Future<HotWord?> getHotWord({bool loadParents = false, List<String>? loadedFields}) async {
-    final _obj =
-        await HotWord().getById(hotWordTechId_, hotWordName, loadParents: loadParents, loadedFields: loadedFields);
+  Future<HotWord?> getHotWord(
+      {bool loadParents = false, List<String>? loadedFields}) async {
+    final _obj = await HotWord().getById(hotWordTechId_, hotWordName,
+        loadParents: loadParents, loadedFields: loadedFields);
     return _obj;
   }
   // END RELATIONSHIPS (ListeningSessionHotWord)
@@ -1872,12 +2054,14 @@ class ListeningSessionHotWord extends TableBase {
   ListeningSessionHotWordManager? __mnListeningSessionHotWord;
 
   ListeningSessionHotWordManager get _mnListeningSessionHotWord {
-    return __mnListeningSessionHotWord = __mnListeningSessionHotWord ?? ListeningSessionHotWordManager();
+    return __mnListeningSessionHotWord =
+        __mnListeningSessionHotWord ?? ListeningSessionHotWordManager();
   }
 
   // METHODS
   @override
-  Map<String, dynamic> toMap({bool forQuery = false, bool forJson = false, bool forView = false}) {
+  Map<String, dynamic> toMap(
+      {bool forQuery = false, bool forJson = false, bool forView = false}) {
     final map = <String, dynamic>{};
     if (listeningSessionTechId_ != null) {
       map['listeningSessionTechId_'] = forView
@@ -1909,7 +2093,9 @@ class ListeningSessionHotWord extends TableBase {
 
   @override
   Future<Map<String, dynamic>> toMapWithChildren(
-      [bool forQuery = false, bool forJson = false, bool forView = false]) async {
+      [bool forQuery = false,
+      bool forJson = false,
+      bool forView = false]) async {
     final map = <String, dynamic>{};
     if (listeningSessionTechId_ != null) {
       map['listeningSessionTechId_'] = forView
@@ -1953,20 +2139,32 @@ class ListeningSessionHotWord extends TableBase {
 
   @override
   List<dynamic> toArgs() {
-    return [listeningSessionTechId_, hotWordTechId_, listeningSessionName, hotWordName];
+    return [
+      listeningSessionTechId_,
+      hotWordTechId_,
+      listeningSessionName,
+      hotWordName
+    ];
   }
 
   @override
   List<dynamic> toArgsWithIds() {
-    return [listeningSessionTechId_, hotWordTechId_, listeningSessionName, hotWordName];
+    return [
+      listeningSessionTechId_,
+      hotWordTechId_,
+      listeningSessionName,
+      hotWordName
+    ];
   }
 
-  static Future<List<ListeningSessionHotWord>?> fromWebUrl(Uri uri, {Map<String, String>? headers}) async {
+  static Future<List<ListeningSessionHotWord>?> fromWebUrl(Uri uri,
+      {Map<String, String>? headers}) async {
     try {
       final response = await http.get(uri, headers: headers);
       return await fromJson(response.body);
     } catch (e) {
-      debugPrint('SQFENTITY ERROR ListeningSessionHotWord.fromWebUrl: ErrorMessage: ${e.toString()}');
+      debugPrint(
+          'SQFENTITY ERROR ListeningSessionHotWord.fromWebUrl: ErrorMessage: ${e.toString()}');
       return null;
     }
   }
@@ -1980,11 +2178,12 @@ class ListeningSessionHotWord extends TableBase {
     var objList = <ListeningSessionHotWord>[];
     try {
       objList = list
-          .map((listeningsessionhotword) =>
-              ListeningSessionHotWord.fromMap(listeningsessionhotword as Map<String, dynamic>))
+          .map((listeningsessionhotword) => ListeningSessionHotWord.fromMap(
+              listeningsessionhotword as Map<String, dynamic>))
           .toList();
     } catch (e) {
-      debugPrint('SQFENTITY ERROR ListeningSessionHotWord.fromJson: ErrorMessage: ${e.toString()}');
+      debugPrint(
+          'SQFENTITY ERROR ListeningSessionHotWord.fromJson: ErrorMessage: ${e.toString()}');
     }
     return objList;
   }
@@ -1998,17 +2197,24 @@ class ListeningSessionHotWord extends TableBase {
     final List<ListeningSessionHotWord> objList = <ListeningSessionHotWord>[];
     loadedFields = loadedFields ?? [];
     for (final map in data) {
-      final obj = ListeningSessionHotWord.fromMap(map as Map<String, dynamic>, setDefaultValues: setDefaultValues);
+      final obj = ListeningSessionHotWord.fromMap(map as Map<String, dynamic>,
+          setDefaultValues: setDefaultValues);
       // final List<String> _loadedFields = List<String>.from(loadedFields);
 
       // RELATIONSHIPS PRELOAD
       if (preload || loadParents) {
         loadedFields = loadedFields ?? [];
-        if ((preloadFields == null || loadParents || preloadFields.contains('plListeningSession'))) {
-          obj.plListeningSession = obj.plListeningSession ?? await obj.getListeningSession(loadParents: loadParents);
+        if ((preloadFields == null ||
+            loadParents ||
+            preloadFields.contains('plListeningSession'))) {
+          obj.plListeningSession = obj.plListeningSession ??
+              await obj.getListeningSession(loadParents: loadParents);
         }
-        if ((preloadFields == null || loadParents || preloadFields.contains('plHotWord'))) {
-          obj.plHotWord = obj.plHotWord ?? await obj.getHotWord(loadParents: loadParents);
+        if ((preloadFields == null ||
+            loadParents ||
+            preloadFields.contains('plHotWord'))) {
+          obj.plHotWord =
+              obj.plHotWord ?? await obj.getHotWord(loadParents: loadParents);
         }
       } // END RELATIONSHIPS PRELOAD
 
@@ -2026,24 +2232,35 @@ class ListeningSessionHotWord extends TableBase {
   /// bool loadParents: if true, loads all parent objects until the object has no parent
 
   /// <returns>returns [ListeningSessionHotWord] if exist, otherwise returns null
-  Future<ListeningSessionHotWord?> getById(int? listeningSessionTechId_, int? hotWordTechId_,
-      {bool preload = false, List<String>? preloadFields, bool loadParents = false, List<String>? loadedFields}) async {
+  Future<ListeningSessionHotWord?> getById(
+      int? listeningSessionTechId_, int? hotWordTechId_,
+      {bool preload = false,
+      List<String>? preloadFields,
+      bool loadParents = false,
+      List<String>? loadedFields}) async {
     if (listeningSessionTechId_ == null) {
       return null;
     }
     ListeningSessionHotWord? obj;
-    final data = await _mnListeningSessionHotWord.getById([listeningSessionTechId_, hotWordTechId_]);
+    final data = await _mnListeningSessionHotWord
+        .getById([listeningSessionTechId_, hotWordTechId_]);
     if (data.length != 0) {
       obj = ListeningSessionHotWord.fromMap(data[0] as Map<String, dynamic>);
 
       // RELATIONSHIPS PRELOAD
       if (preload || loadParents) {
         loadedFields = loadedFields ?? [];
-        if ((preloadFields == null || loadParents || preloadFields.contains('plListeningSession'))) {
-          obj.plListeningSession = obj.plListeningSession ?? await obj.getListeningSession(loadParents: loadParents);
+        if ((preloadFields == null ||
+            loadParents ||
+            preloadFields.contains('plListeningSession'))) {
+          obj.plListeningSession = obj.plListeningSession ??
+              await obj.getListeningSession(loadParents: loadParents);
         }
-        if ((preloadFields == null || loadParents || preloadFields.contains('plHotWord'))) {
-          obj.plHotWord = obj.plHotWord ?? await obj.getHotWord(loadParents: loadParents);
+        if ((preloadFields == null ||
+            loadParents ||
+            preloadFields.contains('plHotWord'))) {
+          obj.plHotWord =
+              obj.plHotWord ?? await obj.getHotWord(loadParents: loadParents);
         }
       } // END RELATIONSHIPS PRELOAD
     } else {
@@ -2076,8 +2293,11 @@ class ListeningSessionHotWord extends TableBase {
 
   /// saveAll method saves the sent List<ListeningSessionHotWord> as a bulk in one transaction
   /// Returns a <List<BoolResult>>
-  static Future<List<dynamic>> saveAll(List<ListeningSessionHotWord> listeningsessionhotwords,
-      {bool? exclusive, bool? noResult, bool? continueOnError}) async {
+  static Future<List<dynamic>> saveAll(
+      List<ListeningSessionHotWord> listeningsessionhotwords,
+      {bool? exclusive,
+      bool? noResult,
+      bool? continueOnError}) async {
     List<dynamic>? result = [];
     // If there is no open transaction, start one
     final isStartedBatch = await DbModel().batchStart();
@@ -2085,7 +2305,10 @@ class ListeningSessionHotWord extends TableBase {
       await obj.save();
     }
     if (!isStartedBatch) {
-      result = await DbModel().batchCommit(exclusive: exclusive, noResult: noResult, continueOnError: continueOnError);
+      result = await DbModel().batchCommit(
+          exclusive: exclusive,
+          noResult: noResult,
+          continueOnError: continueOnError);
     }
     return result!;
   }
@@ -2097,7 +2320,12 @@ class ListeningSessionHotWord extends TableBase {
     try {
       final result = await _mnListeningSessionHotWord.rawInsert(
           'INSERT OR REPLACE INTO listeningSessionHotWord ( listeningSessionTechId_, hotWordTechId_, listeningSessionName, hotWordName)  VALUES (?,?,?,?)',
-          [listeningSessionTechId_, hotWordTechId_, listeningSessionName, hotWordName],
+          [
+            listeningSessionTechId_,
+            hotWordTechId_,
+            listeningSessionName,
+            hotWordName
+          ],
           ignoreBatch);
       if (result! > 0) {
         saveResult = BoolResult(
@@ -2107,12 +2335,15 @@ class ListeningSessionHotWord extends TableBase {
       } else {
         saveResult = BoolResult(
             success: false,
-            errorMessage: 'ListeningSessionHotWord listeningSessionTechId_=$listeningSessionTechId_ did not update');
+            errorMessage:
+                'ListeningSessionHotWord listeningSessionTechId_=$listeningSessionTechId_ did not update');
       }
       return listeningSessionTechId_;
     } catch (e) {
-      saveResult =
-          BoolResult(success: false, errorMessage: 'ListeningSessionHotWord Save failed. Error: ${e.toString()}');
+      saveResult = BoolResult(
+          success: false,
+          errorMessage:
+              'ListeningSessionHotWord Save failed. Error: ${e.toString()}');
       return null;
     }
   }
@@ -2121,8 +2352,11 @@ class ListeningSessionHotWord extends TableBase {
   /// upsertAll() method is faster then saveAll() method. upsertAll() should be used when you are sure that the primary key is greater than zero
   /// Returns a BoolCommitResult
   @override
-  Future<BoolCommitResult> upsertAll(List<ListeningSessionHotWord> listeningsessionhotwords,
-      {bool? exclusive, bool? noResult, bool? continueOnError}) async {
+  Future<BoolCommitResult> upsertAll(
+      List<ListeningSessionHotWord> listeningsessionhotwords,
+      {bool? exclusive,
+      bool? noResult,
+      bool? continueOnError}) async {
     final results = await _mnListeningSessionHotWord.rawInsertAll(
         'INSERT OR REPLACE INTO listeningSessionHotWord ( listeningSessionTechId_, hotWordTechId_, listeningSessionName, hotWordName)  VALUES (?,?,?,?)',
         listeningsessionhotwords,
@@ -2137,7 +2371,8 @@ class ListeningSessionHotWord extends TableBase {
   /// <returns>BoolResult res.success= true (Deleted), false (Could not be deleted)
   @override
   Future<BoolResult> delete([bool hardDelete = false]) async {
-    debugPrint('SQFENTITIY: delete ListeningSessionHotWord invoked (listeningSessionTechId_=$listeningSessionTechId_)');
+    debugPrint(
+        'SQFENTITIY: delete ListeningSessionHotWord invoked (listeningSessionTechId_=$listeningSessionTechId_)');
     if (!_softDeleteActivated || hardDelete) {
       return _mnListeningSessionHotWord.delete(QueryParams(
           whereString: 'listeningSessionTechId_=? AND hotWordTechId_=?',
@@ -2154,17 +2389,21 @@ class ListeningSessionHotWord extends TableBase {
   @override
   Future<BoolResult> recover([bool recoverChilds = true]) {
     // not implemented because:
-    final msg = 'set useSoftDeleting:true in the table definition of [ListeningSessionHotWord] to use this feature';
+    final msg =
+        'set useSoftDeleting:true in the table definition of [ListeningSessionHotWord] to use this feature';
     throw UnimplementedError(msg);
   }
 
   @override
-  ListeningSessionHotWordFilterBuilder select({List<String>? columnsToSelect, bool? getIsDeleted}) {
-    return ListeningSessionHotWordFilterBuilder(this, getIsDeleted)..qparams.selectColumns = columnsToSelect;
+  ListeningSessionHotWordFilterBuilder select(
+      {List<String>? columnsToSelect, bool? getIsDeleted}) {
+    return ListeningSessionHotWordFilterBuilder(this, getIsDeleted)
+      ..qparams.selectColumns = columnsToSelect;
   }
 
   @override
-  ListeningSessionHotWordFilterBuilder distinct({List<String>? columnsToSelect, bool? getIsDeleted}) {
+  ListeningSessionHotWordFilterBuilder distinct(
+      {List<String>? columnsToSelect, bool? getIsDeleted}) {
     return ListeningSessionHotWordFilterBuilder(this, getIsDeleted)
       ..qparams.selectColumns = columnsToSelect
       ..qparams.distinct = true;
@@ -2207,7 +2446,8 @@ class ListeningSessionHotWord extends TableBase {
 
 // region ListeningSessionHotWordField
 class ListeningSessionHotWordField extends FilterBase {
-  ListeningSessionHotWordField(ListeningSessionHotWordFilterBuilder listeningsessionhotwordFB)
+  ListeningSessionHotWordField(
+      ListeningSessionHotWordFilterBuilder listeningsessionhotwordFB)
       : super(listeningsessionhotwordFB);
 
   @override
@@ -2257,12 +2497,14 @@ class ListeningSessionHotWordField extends FilterBase {
 
   @override
   ListeningSessionHotWordFilterBuilder greaterThanOrEquals(dynamic pValue) {
-    return super.greaterThanOrEquals(pValue) as ListeningSessionHotWordFilterBuilder;
+    return super.greaterThanOrEquals(pValue)
+        as ListeningSessionHotWordFilterBuilder;
   }
 
   @override
   ListeningSessionHotWordFilterBuilder lessThanOrEquals(dynamic pValue) {
-    return super.lessThanOrEquals(pValue) as ListeningSessionHotWordFilterBuilder;
+    return super.lessThanOrEquals(pValue)
+        as ListeningSessionHotWordFilterBuilder;
   }
 
   @override
@@ -2279,7 +2521,9 @@ class ListeningSessionHotWordField extends FilterBase {
 
 // region ListeningSessionHotWordFilterBuilder
 class ListeningSessionHotWordFilterBuilder extends ConjunctionBase {
-  ListeningSessionHotWordFilterBuilder(ListeningSessionHotWord obj, bool? getIsDeleted) : super(obj, getIsDeleted) {
+  ListeningSessionHotWordFilterBuilder(
+      ListeningSessionHotWord obj, bool? getIsDeleted)
+      : super(obj, getIsDeleted) {
     _mnListeningSessionHotWord = obj._mnListeningSessionHotWord;
     _softDeleteActivated = obj.softDeleteActivated;
   }
@@ -2310,7 +2554,8 @@ class ListeningSessionHotWordFilterBuilder extends ConjunctionBase {
 
   /// String whereCriteria, write raw query without 'where' keyword. Like this: 'field1 like 'test%' and field2 = 3'
   @override
-  ListeningSessionHotWordFilterBuilder where(String? whereCriteria, {dynamic parameterValue}) {
+  ListeningSessionHotWordFilterBuilder where(String? whereCriteria,
+      {dynamic parameterValue}) {
     super.where(whereCriteria, parameterValue: parameterValue);
     return this;
   }
@@ -2373,24 +2618,29 @@ class ListeningSessionHotWordFilterBuilder extends ConjunctionBase {
     return this;
   }
 
-  ListeningSessionHotWordField _setField(ListeningSessionHotWordField? field, String colName, DbType dbtype) {
+  ListeningSessionHotWordField _setField(
+      ListeningSessionHotWordField? field, String colName, DbType dbtype) {
     return ListeningSessionHotWordField(this)
-      ..param = DbParameter(dbType: dbtype, columnName: colName, wStartBlock: openedBlock);
+      ..param = DbParameter(
+          dbType: dbtype, columnName: colName, wStartBlock: openedBlock);
   }
 
   ListeningSessionHotWordField? _listeningSessionTechId_;
   ListeningSessionHotWordField get listeningSessionTechId_ {
-    return _listeningSessionTechId_ = _setField(_listeningSessionTechId_, 'listeningSessionTechId_', DbType.integer);
+    return _listeningSessionTechId_ = _setField(
+        _listeningSessionTechId_, 'listeningSessionTechId_', DbType.integer);
   }
 
   ListeningSessionHotWordField? _hotWordTechId_;
   ListeningSessionHotWordField get hotWordTechId_ {
-    return _hotWordTechId_ = _setField(_hotWordTechId_, 'hotWordTechId_', DbType.integer);
+    return _hotWordTechId_ =
+        _setField(_hotWordTechId_, 'hotWordTechId_', DbType.integer);
   }
 
   ListeningSessionHotWordField? _listeningSessionName;
   ListeningSessionHotWordField get listeningSessionName {
-    return _listeningSessionName = _setField(_listeningSessionName, 'listeningSessionName', DbType.text);
+    return _listeningSessionName =
+        _setField(_listeningSessionName, 'listeningSessionName', DbType.text);
   }
 
   ListeningSessionHotWordField? _hotWordName;
@@ -2407,7 +2657,8 @@ class ListeningSessionHotWordFilterBuilder extends ConjunctionBase {
     var r = BoolResult(success: false);
 
     if (_softDeleteActivated && !hardDelete) {
-      r = await _mnListeningSessionHotWord!.updateBatch(qparams, {'isDeleted': 1});
+      r = await _mnListeningSessionHotWord!
+          .updateBatch(qparams, {'isDeleted': 1});
     } else {
       r = await _mnListeningSessionHotWord!.delete(qparams);
     }
@@ -2437,7 +2688,10 @@ class ListeningSessionHotWordFilterBuilder extends ConjunctionBase {
   /// <returns> ListeningSessionHotWord?
   @override
   Future<ListeningSessionHotWord?> toSingle(
-      {bool preload = false, List<String>? preloadFields, bool loadParents = false, List<String>? loadedFields}) async {
+      {bool preload = false,
+      List<String>? preloadFields,
+      bool loadParents = false,
+      List<String>? loadedFields}) async {
     buildParameters(pSize: 1);
     final objFuture = _mnListeningSessionHotWord!.toList(qparams);
     final data = await objFuture;
@@ -2448,11 +2702,17 @@ class ListeningSessionHotWordFilterBuilder extends ConjunctionBase {
       // RELATIONSHIPS PRELOAD
       if (preload || loadParents) {
         loadedFields = loadedFields ?? [];
-        if ((preloadFields == null || loadParents || preloadFields.contains('plListeningSession'))) {
-          obj.plListeningSession = obj.plListeningSession ?? await obj.getListeningSession(loadParents: loadParents);
+        if ((preloadFields == null ||
+            loadParents ||
+            preloadFields.contains('plListeningSession'))) {
+          obj.plListeningSession = obj.plListeningSession ??
+              await obj.getListeningSession(loadParents: loadParents);
         }
-        if ((preloadFields == null || loadParents || preloadFields.contains('plHotWord'))) {
-          obj.plHotWord = obj.plHotWord ?? await obj.getHotWord(loadParents: loadParents);
+        if ((preloadFields == null ||
+            loadParents ||
+            preloadFields.contains('plHotWord'))) {
+          obj.plHotWord =
+              obj.plHotWord ?? await obj.getHotWord(loadParents: loadParents);
         }
       } // END RELATIONSHIPS PRELOAD
     } else {
@@ -2471,19 +2731,27 @@ class ListeningSessionHotWordFilterBuilder extends ConjunctionBase {
   /// <returns> ListeningSessionHotWord?
   @override
   Future<ListeningSessionHotWord> toSingleOrDefault(
-      {bool preload = false, List<String>? preloadFields, bool loadParents = false, List<String>? loadedFields}) async {
+      {bool preload = false,
+      List<String>? preloadFields,
+      bool loadParents = false,
+      List<String>? loadedFields}) async {
     return await toSingle(
-            preload: preload, preloadFields: preloadFields, loadParents: loadParents, loadedFields: loadedFields) ??
+            preload: preload,
+            preloadFields: preloadFields,
+            loadParents: loadParents,
+            loadedFields: loadedFields) ??
         ListeningSessionHotWord();
   }
 
   /// This method returns int. [ListeningSessionHotWord]
   /// <returns>int
   @override
-  Future<int> toCount([VoidCallback Function(int c)? listeningsessionhotwordCount]) async {
+  Future<int> toCount(
+      [VoidCallback Function(int c)? listeningsessionhotwordCount]) async {
     buildParameters();
     qparams.selectColumns = ['COUNT(1) AS CNT'];
-    final listeningsessionhotwordsFuture = await _mnListeningSessionHotWord!.toList(qparams);
+    final listeningsessionhotwordsFuture =
+        await _mnListeningSessionHotWord!.toList(qparams);
     final int count = listeningsessionhotwordsFuture[0]['CNT'] as int;
     if (listeningsessionhotwordCount != null) {
       listeningsessionhotwordCount(count);
@@ -2501,14 +2769,18 @@ class ListeningSessionHotWordFilterBuilder extends ConjunctionBase {
   /// <returns>List<ListeningSessionHotWord>
   @override
   Future<List<ListeningSessionHotWord>> toList(
-      {bool preload = false, List<String>? preloadFields, bool loadParents = false, List<String>? loadedFields}) async {
+      {bool preload = false,
+      List<String>? preloadFields,
+      bool loadParents = false,
+      List<String>? loadedFields}) async {
     final data = await toMapList();
-    final List<ListeningSessionHotWord> listeningsessionhotwordsData = await ListeningSessionHotWord.fromMapList(data,
-        preload: preload,
-        preloadFields: preloadFields,
-        loadParents: loadParents,
-        loadedFields: loadedFields,
-        setDefaultValues: qparams.selectColumns == null);
+    final List<ListeningSessionHotWord> listeningsessionhotwordsData =
+        await ListeningSessionHotWord.fromMapList(data,
+            preload: preload,
+            preloadFields: preloadFields,
+            loadParents: loadParents,
+            loadedFields: loadedFields,
+            setDefaultValues: qparams.selectColumns == null);
     return listeningsessionhotwordsData;
   }
 
@@ -2560,13 +2832,16 @@ class ListeningSessionHotWordFilterBuilder extends ConjunctionBase {
   /// This method returns Primary Key List<listeningSessionTechId_,hotWordTechId_> [ListeningSessionHotWord]
   /// <returns>List<listeningSessionTechId_,hotWordTechId_>
   @override
-  Future<List<ListeningSessionHotWord>> toListPrimaryKey([bool buildParams = true]) async {
+  Future<List<ListeningSessionHotWord>> toListPrimaryKey(
+      [bool buildParams = true]) async {
     if (buildParams) {
       buildParameters();
     }
     qparams.selectColumns = ['listeningSessionTechId_', 'hotWordTechId_'];
-    final listeningsessionhotwordFuture = await _mnListeningSessionHotWord!.toList(qparams);
-    return await ListeningSessionHotWord.fromMapList(listeningsessionhotwordFuture);
+    final listeningsessionhotwordFuture =
+        await _mnListeningSessionHotWord!.toList(qparams);
+    return await ListeningSessionHotWord.fromMapList(
+        listeningsessionhotwordFuture);
   }
 
   /// Returns List<dynamic> for selected columns. Use this method for 'groupBy' with min,max,avg..  [ListeningSessionHotWord]
@@ -2589,7 +2864,8 @@ class ListeningSessionHotWordFilterBuilder extends ConjunctionBase {
   /// Returns List<String> for selected first column
   /// Sample usage: await ListeningSessionHotWord.select(columnsToSelect: ['columnName']).toListString()
   @override
-  Future<List<String>> toListString([VoidCallback Function(List<String> o)? listString]) async {
+  Future<List<String>> toListString(
+      [VoidCallback Function(List<String> o)? listString]) async {
     buildParameters();
 
     final objectFuture = _mnListeningSessionHotWord!.toList(qparams);
@@ -2613,24 +2889,27 @@ class ListeningSessionHotWordFields {
   static TableField? _fListeningSessionTechId_;
   static TableField get listeningSessionTechId_ {
     return _fListeningSessionTechId_ = _fListeningSessionTechId_ ??
-        SqlSyntax.setField(_fListeningSessionTechId_, 'listeningSessionTechId_', DbType.integer);
+        SqlSyntax.setField(_fListeningSessionTechId_, 'listeningSessionTechId_',
+            DbType.integer);
   }
 
   static TableField? _fHotWordTechId_;
   static TableField get hotWordTechId_ {
-    return _fHotWordTechId_ =
-        _fHotWordTechId_ ?? SqlSyntax.setField(_fHotWordTechId_, 'hotWordTechId_', DbType.integer);
+    return _fHotWordTechId_ = _fHotWordTechId_ ??
+        SqlSyntax.setField(_fHotWordTechId_, 'hotWordTechId_', DbType.integer);
   }
 
   static TableField? _fListeningSessionName;
   static TableField get listeningSessionName {
-    return _fListeningSessionName =
-        _fListeningSessionName ?? SqlSyntax.setField(_fListeningSessionName, 'listeningSessionName', DbType.text);
+    return _fListeningSessionName = _fListeningSessionName ??
+        SqlSyntax.setField(
+            _fListeningSessionName, 'listeningSessionName', DbType.text);
   }
 
   static TableField? _fHotWordName;
   static TableField get hotWordName {
-    return _fHotWordName = _fHotWordName ?? SqlSyntax.setField(_fHotWordName, 'hotWordName', DbType.text);
+    return _fHotWordName = _fHotWordName ??
+        SqlSyntax.setField(_fHotWordName, 'hotWordName', DbType.text);
   }
 }
 // endregion ListeningSessionHotWordFields
@@ -2638,10 +2917,17 @@ class ListeningSessionHotWordFields {
 //region ListeningSessionHotWordManager
 class ListeningSessionHotWordManager extends SqfEntityProvider {
   ListeningSessionHotWordManager()
-      : super(DbModel(), tableName: _tableName, primaryKeyList: _primaryKeyList, whereStr: _whereStr);
+      : super(DbModel(),
+            tableName: _tableName,
+            primaryKeyList: _primaryKeyList,
+            whereStr: _whereStr);
   static const String _tableName = 'listeningSessionHotWord';
-  static const List<String> _primaryKeyList = ['listeningSessionTechId_', 'hotWordTechId_'];
-  static const String _whereStr = 'listeningSessionTechId_=? AND hotWordTechId_=?';
+  static const List<String> _primaryKeyList = [
+    'listeningSessionTechId_',
+    'hotWordTechId_'
+  ];
+  static const String _whereStr =
+      'listeningSessionTechId_=? AND hotWordTechId_=?';
 }
 
 //endregion ListeningSessionHotWordManager
@@ -2650,7 +2936,8 @@ class RownumberSequence {
   /// Assigns a new value when it is triggered and returns the new value
   /// returns Future<int>
   Future<int> nextVal([VoidCallback Function(int o)? nextval]) async {
-    final val = await DbModelSequenceManager().sequence(SequenceRownumberSequence.getInstance, true);
+    final val = await DbModelSequenceManager()
+        .sequence(SequenceRownumberSequence.getInstance, true);
     if (nextval != null) {
       nextval(val);
     }
@@ -2660,7 +2947,8 @@ class RownumberSequence {
   /// Get the current value
   /// returns Future<int>
   Future<int> currentVal([VoidCallback Function(int o)? currentval]) async {
-    final val = await DbModelSequenceManager().sequence(SequenceRownumberSequence.getInstance, false);
+    final val = await DbModelSequenceManager()
+        .sequence(SequenceRownumberSequence.getInstance, false);
     if (currentval != null) {
       currentval(val);
     }
@@ -2670,7 +2958,8 @@ class RownumberSequence {
   /// Reset sequence to start value
   /// returns start value
   Future<int> reset([VoidCallback Function(int o)? currentval]) async {
-    final val = await DbModelSequenceManager().sequence(SequenceRownumberSequence.getInstance, false, reset: true);
+    final val = await DbModelSequenceManager()
+        .sequence(SequenceRownumberSequence.getInstance, false, reset: true);
     if (currentval != null) {
       currentval(val);
     }

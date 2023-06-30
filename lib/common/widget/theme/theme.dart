@@ -40,11 +40,16 @@ class GuardianTheme {
         StateButtonThemeExtension(
             colorGradient: GuardianThemeColor.buttonDefaultGradient(isDarkTheme),
             stateOnColor: GuardianThemeColor.stateOnColor,
-            stateOffColor: GuardianThemeColor.stateOffColor)
+            stateOffColor: GuardianThemeColor.stateOffColor),
+        ListeningProfileThemeExtension(
+            selectedTileColor: GuardianThemeColor.listeningProfileSelectedBackgroundColor,
+            unselectedTileColor: GuardianThemeColor.listeningProfileUnselectedBackgroundColor,
+            selectedTextColor: GuardianThemeColor.commonCyan,
+            unselectedTextColor: GuardianThemeColor.commonWhite)
       ]);
 }
 
-/// Theme extension for [BouncingStateButton]
+/// Theme extension for [RippleButton]
 class StateButtonThemeExtension extends ThemeExtension<StateButtonThemeExtension> {
   Gradient? colorGradient;
   Color? stateOnColor;
@@ -70,5 +75,41 @@ class StateButtonThemeExtension extends ThemeExtension<StateButtonThemeExtension
         colorGradient: Gradient.lerp(colorGradient, other.colorGradient, t),
         stateOnColor: Color.lerp(stateOnColor, other.stateOnColor, t),
         stateOffColor: Color.lerp(stateOffColor, other.stateOffColor, t));
+  }
+}
+
+/// Theme extension for [ListeningProfile]
+class ListeningProfileThemeExtension extends ThemeExtension<ListeningProfileThemeExtension> {
+  Color? unselectedTileColor;
+  Color? selectedTileColor;
+  Color? unselectedTextColor;
+  Color? selectedTextColor;
+
+  ListeningProfileThemeExtension(
+      {this.unselectedTileColor, this.selectedTextColor, this.selectedTileColor, this.unselectedTextColor});
+
+  @override
+  ThemeExtension<ListeningProfileThemeExtension> copyWith(
+          {Color? selectedTextColor,
+          Color? selectedTileColor,
+          Color? unselectedTileColor,
+          Color? unselectedTextColor}) =>
+      ListeningProfileThemeExtension(
+          selectedTextColor: selectedTextColor ?? this.selectedTextColor,
+          selectedTileColor: selectedTileColor ?? this.selectedTileColor,
+          unselectedTextColor: unselectedTextColor ?? this.unselectedTextColor,
+          unselectedTileColor: unselectedTileColor ?? this.unselectedTileColor);
+
+  @override
+  ThemeExtension<ListeningProfileThemeExtension> lerp(ThemeExtension<ListeningProfileThemeExtension>? other, double t) {
+    if (other is! ListeningProfileThemeExtension) {
+      return this;
+    }
+
+    return ListeningProfileThemeExtension(
+        selectedTextColor: Color.lerp(selectedTextColor, other.selectedTextColor, t),
+        selectedTileColor: Color.lerp(selectedTileColor, other.selectedTileColor, t),
+        unselectedTextColor: Color.lerp(unselectedTextColor, other.unselectedTextColor, t),
+        unselectedTileColor: Color.lerp(unselectedTileColor, other.unselectedTileColor, t));
   }
 }

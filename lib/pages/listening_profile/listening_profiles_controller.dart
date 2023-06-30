@@ -6,8 +6,8 @@ import 'package:guardian_project/service/db_client_service.dart';
 import 'package:guardian_project/service_locator.dart';
 
 /// ## [ListeningSessionPage] controller
-class ListeningSessionPageController extends BasePopingPageController<_StateListeningSessionPageController> {
-  ListeningSessionPageController() : super(_StateListeningSessionPageController());
+class ListeningProfilesPageController extends BaseViewPageController<_StateListeningSessionPageController> {
+  ListeningProfilesPageController() : super(_StateListeningSessionPageController());
 
   /// db client to communicate with the DB
   final DbClientService _dbClient = serviceLocator<DbClientService>();
@@ -35,8 +35,8 @@ class ListeningSessionPageController extends BasePopingPageController<_StateList
   }
 
   /// add a listening session to db
-  Future<void> addListeningSession() async {
-    final name = _buildUniqueListeningSessionName();
+  Future<void> addListeningProfile() async {
+    final name = _buildUniqueListeningProfileName();
     final lsObject = ListeningSessionModelObject.empty()
       ..name = name
       ..label = name;
@@ -58,8 +58,14 @@ class ListeningSessionPageController extends BasePopingPageController<_StateList
     await _loadDataFromDb();
   }
 
+  /// remove a listening profile
+  Future<void> removeListeningProfile(int index) async {
+    stateData._listeningSessions.removeAt(index);
+    notifyListeners();
+  }
+
   /// build a unique listening session name
-  String _buildUniqueListeningSessionName() {
+  String _buildUniqueListeningProfileName() {
     int identifier = 0;
 
     while (stateData._listeningSessions.any((ls) => ls.name == "listening_session$identifier")) {
@@ -72,16 +78,23 @@ class ListeningSessionPageController extends BasePopingPageController<_StateList
   /// loads data from DB
   Future<void> _loadDataFromDb() async {
     /// retrieving active listening sessions
-    stateData._listeningSessions = await _dbClient.getItems();
-    if (stateData._listeningSessions.isNotEmpty) {
-      stateData._activeListeningSession = stateData._listeningSessions
-          .firstWhere((ls) => ls.isActive == true, orElse: () => stateData._listeningSessions.first);
-    }
+    /// Using fireAndForget with controller handling, allow to use isBusy on async state to know if the future is completed
+    fireAndForget(() async {
+      stateData._listeningSessions = await _dbClient.getItems();
+      if (stateData._listeningSessions.isNotEmpty) {
+        stateData._activeListeningSession = stateData._listeningSessions
+            .firstWhere((ls) => ls.isActive == true, orElse: () => stateData._listeningSessions.first);
+      }
+    }(), true);
+
     notifyListeners();
   }
 
   @override
-  Future<bool> onWillPop() => Future.value(!stateData.isBusy);
+  void onHide() {}
+
+  @override
+  void onShow() => initAsync();
 }
 
 class _StateListeningSessionPageController extends BasePageControllerState {

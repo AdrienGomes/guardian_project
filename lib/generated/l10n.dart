@@ -60,6 +60,16 @@ class S {
     );
   }
 
+  /// `Listening Profile`
+  String get app_bar_title_listening_profile_page {
+    return Intl.message(
+      'Listening Profile',
+      name: 'app_bar_title_listening_profile_page',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Sound Conf.`
   String get app_bar_title_sound_configuration_page {
     return Intl.message(
@@ -126,6 +136,36 @@ class S {
     return Intl.message(
       'Task is already alive, can\'t launch another one',
       name: 'background_task_service_already_alive_task_error_label',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete`
+  String get common_delete_label {
+    return Intl.message(
+      'Delete',
+      name: 'common_delete_label',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit`
+  String get common_edit_label {
+    return Intl.message(
+      'Edit',
+      name: 'common_edit_label',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New Profile`
+  String get common_new_profile_label {
+    return Intl.message(
+      'New Profile',
+      name: 'common_new_profile_label',
       desc: '',
       args: [],
     );

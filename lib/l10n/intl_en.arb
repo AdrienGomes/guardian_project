@@ -1,5 +1,6 @@
 {
   "app_bar_title_home_page": "Home Page",
+  "app_bar_title_listening_profile_page": "Listening Profile",
   "app_bar_title_sound_configuration_page": "Sound Conf.",
   "home_page_button_state_on_label": "Activated",
   "home_page_button_state_off_label": "Deactivated",
@@ -13,5 +14,8 @@
     }
   },
   "level_indicator_gap_detected_label": "Gap detected",
-  "background_task_service_already_alive_task_error_label": "Task is already alive, can't launch another one"
+  "background_task_service_already_alive_task_error_label": "Task is already alive, can't launch another one",
+  "common_delete_label": "Delete",
+  "common_edit_label": "Edit",
+  "common_new_profile_label": "New Profile"
 }
